@@ -87,7 +87,7 @@ ${preferences.planType === 'weekly' ? `{
   try {
     const body = JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { temperature: 0.7, maxOutputTokens: 4096 }
+      generationConfig: { temperature: 0.7, maxOutputTokens: 8192 }
     });
 
     const geminiRes = await fetch(GEMINI_URL, {
@@ -100,7 +100,10 @@ ${preferences.planType === 'weekly' ? `{
     if (!geminiRes.ok) throw new Error(data.error?.message || 'Gemini API error');
 
     const raw = data.candidates[0].content.parts[0].text.trim();
-    const jsonStr = raw.replace(/^```json\n?/, '').replace(/\n?```$/, '').trim();
+    let jsonStr = raw.replace(/^```json\n?/, '').replace(/\n?```$/, '').trim();
+    // Remove any trailing incomplete content after last valid closing brace
+    const lastBrace = jsonStr.lastIndexOf('}');
+    if (lastBrace !== -1) jsonStr = jsonStr.substring(0, lastBrace + 1);
     const plan = JSON.parse(jsonStr);
     res.json({ success: true, plan });
 
