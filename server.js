@@ -111,34 +111,21 @@ ${preferences.planType === 'weekly' ? `{
     const raw = data.candidates[0].content.parts[0].text.trim();
     let jsonStr = raw.replace(/^```json\n?/, '').replace(/\n?```$/, '').trim();
 
-    // Try parsing as-is first
+    // Try parsing as-is; if truncated, repair by closing open brackets
     let plan;
     try {
       plan = JSON.parse(jsonStr);
     } catch (e) {
-      // Response was truncated — attempt repair by finding the last complete meal object
-      // Close any open arrays/objects by counting brackets
-      const opens = { '{': 0, '[': 0 };
-      const pairs = { '}': '{', ']': '[' };
-      for (const ch of jsonStr) {
-        if (ch === '{' || ch === '[') opens[ch]++;
-        if (ch === '}' || ch === ']') opens[pairs[ch]] = Math.max(0, opens[pairs[ch]] - 1);
-      }
-      // Append missing closers
       let repaired = jsonStr.trimEnd().replace(/,\s*$/, '');
-      for (let i = 0; i < opens['{'); i++) repaired += '}';
-      for (let i = 0; i < opens['[']; i++) repaired += ']';
-      // Close outer wrappers
-      if (opens['{'] > 0 || opens['['] > 0) {
-        // Re-count after repair attempt
-        let o = 0, a = 0;
-        for (const ch of repaired) {
-          if (ch === '{') o++; if (ch === '}') o--;
-          if (ch === '[') a++; if (ch === ']') a--;
-        }
-        while (a > 0) { repaired += ']'; a--; }
-        while (o > 0) { repaired += '}'; o--; }
+      let o = 0, a = 0;
+      for (const ch of repaired) {
+        if (ch === '{') o++;
+        else if (ch === '}') o--;
+        else if (ch === '[') a++;
+        else if (ch === ']') a--;
       }
+      while (a > 0) { repaired += ']'; a--; }
+      while (o > 0) { repaired += '}'; o--; }
       plan = JSON.parse(repaired);
     }
     res.json({ success: true, plan });
