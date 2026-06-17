@@ -979,7 +979,7 @@ window.runGenerate = async function() {
   const iv = setInterval(()=>{ lm.textContent = msgs[++mi%msgs.length]; },2200);
 
   try {
-    const res = await fetch('https://pantrypandit.com/api/generate', {
+    const res = await fetch('/api/generate', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
         profile:     { name: userData.name||'User', familySize:G.familySize, diet:G.diet, allergies:G.allergies },
