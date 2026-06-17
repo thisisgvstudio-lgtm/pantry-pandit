@@ -10,10 +10,12 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 app.use(cors({
-  origin: ['https://pantrypandit.com', 'http://localhost', 'http://localhost:3000', 'capacitor://localhost', 'http://localhost:80'],
+  origin: function(origin, callback) { callback(null, true); },
   methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type']
+  allowedHeaders: ['Content-Type'],
+  credentials: false
 }));
+app.options('*', cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
