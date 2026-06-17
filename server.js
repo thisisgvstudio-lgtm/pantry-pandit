@@ -9,7 +9,11 @@ const PORT = process.env.PORT || 3000;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
-app.use(cors());
+app.use(cors({
+  origin: ['https://pantrypandit.com', 'http://localhost', 'http://localhost:3000', 'capacitor://localhost', 'http://localhost:80'],
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type']
+}));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -37,6 +41,8 @@ app.post('/api/generate', async (req, res) => {
 
   const prompt = `You are Pantry Pandit, an expert Indian chef and nutritionist.
 
+IMPORTANT: Pantry items may be written in any Indian language (Hindi, Tamil, Telugu, Kannada, Malayalam, Bengali, Gujarati, Marathi, Punjabi, etc.) or in English. Recognise and understand all ingredient names regardless of language or script, and always respond in English.
+
 USER PROFILE:
 - Name: ${profile.name}
 - Family size: ${profile.familySize} people
@@ -57,9 +63,10 @@ RULES:
 2. Respect the dietary preference strictly.
 3. For non-veg dishes, only use proteins tagged as non-veg.
 4. Scale quantities for ${profile.familySize} people.
-5. Each meal must include: dish name, 2-3 line recipe summary, pantry items used.
+5. Each meal must include: dish name, step-by-step cooking instructions (4-6 clear steps), estimated calories per serving, and pantry items used.
 6. Vary the meals — no repeats.
 7. Use authentic ${preferences.cuisine} recipes and techniques.
+8. Calories should be realistic and per person.
 
 OUTPUT FORMAT — return ONLY valid JSON, no extra text:
 ${preferences.planType === 'weekly' ? `{
@@ -68,9 +75,9 @@ ${preferences.planType === 'weekly' ? `{
     {
       "day": "Monday",
       "meals": [
-        { "type": "Breakfast", "name": "...", "recipe": "...", "uses": ["item1","item2"] },
-        { "type": "Lunch", "name": "...", "recipe": "...", "uses": ["item1","item2"] },
-        { "type": "Dinner", "name": "...", "recipe": "...", "uses": ["item1","item2"] }
+        { "type": "Breakfast", "name": "...", "recipe": "Step 1: ... Step 2: ... Step 3: ...", "calories": 350, "uses": ["item1","item2"] },
+        { "type": "Lunch", "name": "...", "recipe": "Step 1: ... Step 2: ... Step 3: ...", "calories": 520, "uses": ["item1","item2"] },
+        { "type": "Dinner", "name": "...", "recipe": "Step 1: ... Step 2: ... Step 3: ...", "calories": 480, "uses": ["item1","item2"] }
       ]
     }
   ]
@@ -78,9 +85,9 @@ ${preferences.planType === 'weekly' ? `{
   "plan_type": "${preferences.planType}",
   "title": "${preferences.planType === 'festival' ? (preferences.festival || 'Festival') + ' Special Menu' : "Today's Meal Plan"}",
   "meals": [
-    { "type": "Breakfast", "name": "...", "recipe": "...", "uses": ["item1","item2"], "serves": "${profile.familySize}" },
-    { "type": "Lunch", "name": "...", "recipe": "...", "uses": ["item1","item2"], "serves": "${profile.familySize}" },
-    { "type": "Dinner", "name": "...", "recipe": "...", "uses": ["item1","item2"], "serves": "${profile.familySize}" }
+    { "type": "Breakfast", "name": "...", "recipe": "Step 1: ... Step 2: ... Step 3: ...", "calories": 350, "uses": ["item1","item2"], "serves": "${profile.familySize}" },
+    { "type": "Lunch", "name": "...", "recipe": "Step 1: ... Step 2: ... Step 3: ...", "calories": 520, "uses": ["item1","item2"], "serves": "${profile.familySize}" },
+    { "type": "Dinner", "name": "...", "recipe": "Step 1: ... Step 2: ... Step 3: ...", "calories": 480, "uses": ["item1","item2"], "serves": "${profile.familySize}" }
   ]
 }`}`;
 
