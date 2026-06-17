@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+<title>Pantry Pandit — Dashboard</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --purple:#7B2FF7;--purple-l:#F3EAFE;--purple-d:#4A00E0;
+  --coral:#FF5722;--coral-l:#FBE9E7;
+  --orange:#FF9800;--orange-l:#FFF3E0;
+  --teal:#00BFA5;--teal-l:#E0F7F4;
+  --pink:#E91E63;--pink-l:#FCE4EC;
+  --green:#2E7D32;--green-l:#E8F5E9;
+  --blue:#1565C0;--blue-l:#E3F2FD;
+  --red:#AD1457;--red-l:#FCE4EC;
+  --yellow-l:#FFF8E1;
+  --text:#1a1a2e;--muted:#666;--border:#e8e8e8;
+  --bg:#f5f0ff;--white:#fff;
+  --sidebar:260px;--topbar:64px;
+  --radius:14px;--radius-sm:10px;
+  --shadow:0 2px 16px rgba(123,47,247,0.08);
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* ── Layout ── */
+.layout{display:flex;min-height:100vh}
+
+/* ── Sidebar ── */
+.sidebar{
+  width:var(--sidebar);background:var(--white);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;height:100vh;z-index:100;
+  transition:transform .3s;
+}
+.sidebar-logo{
+  padding:20px 20px 16px;
+  display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid var(--border);
+}
+.sidebar-logo .sl{font-size:26px}
+.sidebar-logo .sn{font-size:17px;font-weight:800;background:linear-gradient(135deg,var(--purple),var(--coral));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+.nav-section{padding:16px 12px 0;flex:1;overflow-y:auto}
+.nav-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;padding:0 10px;margin-bottom:6px}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;border-radius:10px;cursor:pointer;
+  margin-bottom:3px;transition:all .15s;
+  font-size:14px;font-weight:500;color:var(--muted);
+}
+.nav-item:hover{background:var(--purple-l);color:var(--purple)}
+.nav-item.active{background:var(--purple-l);color:var(--purple);font-weight:700}
+.nav-item .ni{font-size:18px;width:22px;text-align:center}
+
+.sidebar-bottom{padding:12px;border-top:1px solid var(--border)}
+.user-chip{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;border-radius:10px;cursor:pointer;
+  transition:background .15s;
+}
+.user-chip:hover{background:var(--bg)}
+.user-avatar{
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,var(--purple),var(--coral));
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:700;color:#fff;flex-shrink:0;
+  overflow:hidden;
+}
+.user-avatar img{width:100%;height:100%;object-fit:cover}
+.user-info .un{font-size:13px;font-weight:600;color:var(--text)}
+.user-info .ue{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px}
+.logout-btn{
+  display:flex;align-items:center;gap:8px;
+  padding:9px 12px;border-radius:10px;cursor:pointer;
+  font-size:13px;font-weight:600;color:#e53935;margin-top:4px;
+  transition:background .15s;
+}
+.logout-btn:hover{background:#ffebee}
+
+/* ── Mobile topbar ── */
+.topbar{
+  display:none;position:fixed;top:0;left:0;right:0;height:var(--topbar);
+  background:linear-gradient(135deg,var(--purple),var(--coral));
+  padding:0 16px;align-items:center;justify-content:space-between;
+  z-index:200;
+}
+.topbar-logo{display:flex;align-items:center;gap:8px}
+.topbar-logo span{font-size:20px;color:#fff;font-weight:800}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.menu-btn{background:rgba(255,255,255,0.2);border:none;border-radius:8px;padding:7px;cursor:pointer;color:#fff;font-size:18px}
+.top-avatar{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;overflow:hidden;cursor:pointer}
+.top-avatar img{width:100%;height:100%;object-fit:cover}
+
+/* ── Main content ── */
+.main{margin-left:var(--sidebar);padding:28px;min-height:100vh}
+
+/* ── Sections ── */
+.section{display:none}
+.section.active{display:block}
+
+/* ── Home section ── */
+.greeting{font-size:24px;font-weight:800;color:var(--text);margin-bottom:4px}
+.greeting-sub{font-size:14px;color:var(--muted);margin-bottom:24px}
+
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.stat-card{background:var(--white);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow)}
+.stat-card .sc-val{font-size:28px;font-weight:800;margin-bottom:2px}
+.stat-card .sc-lbl{font-size:12px;color:var(--muted);font-weight:500}
+.sc-purple .sc-val{color:var(--purple)}
+.sc-coral  .sc-val{color:var(--coral)}
+.sc-teal   .sc-val{color:var(--teal)}
+
+/* ── Weekly Calendar ── */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.section-title{font-size:16px;font-weight:800;color:var(--text)}
+.section-action{font-size:12px;color:var(--purple);font-weight:600;cursor:pointer;background:none;border:none;padding:4px 8px;border-radius:6px}
+.section-action:hover{background:var(--purple-l)}
+
+.cal-wrap{background:var(--white);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);overflow-x:auto;margin-bottom:24px}
+.cal-grid{display:grid;grid-template-columns:70px repeat(7,1fr);gap:6px;min-width:600px}
+.cal-header{font-size:11px;font-weight:700;color:var(--muted);text-align:center;padding:6px 4px;text-transform:uppercase;letter-spacing:0.4px}
+.cal-row-label{font-size:11px;font-weight:700;padding:8px 6px;display:flex;align-items:center;border-radius:6px}
+.cal-row-label.rb{color:#E65100;background:var(--yellow-l)}
+.cal-row-label.rl{color:var(--green);background:var(--green-l)}
+.cal-row-label.rd{color:var(--purple-d);background:var(--purple-l)}
+.cal-cell{
+  background:#fafafa;border:1px solid var(--border);border-radius:8px;
+  padding:7px 8px;font-size:11px;color:var(--text);text-align:center;
+  cursor:pointer;transition:all .15s;min-height:54px;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:500;line-height:1.3;
+}
+.cal-cell:hover{border-color:var(--purple);background:var(--purple-l);color:var(--purple)}
+.cal-cell.has-meal{background:var(--white);border-color:var(--border)}
+.cal-cell.empty-cell{color:#ccc;font-size:10px}
+.cal-day-col.today .cal-header{color:var(--purple);background:var(--purple-l);border-radius:8px}
+
+/* ── Two-col grid ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+
+/* ── Card ── */
+.dash-card{background:var(--white);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.card-title{font-size:14px;font-weight:800;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+
+/* ── Plan history ── */
+.plan-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;
+}
+.plan-item:last-child{border-bottom:none}
+.plan-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.plan-item-info .pi-name{font-size:13px;font-weight:600;color:var(--text)}
+.plan-item-info .pi-meta{font-size:11px;color:var(--muted);margin-top:1px}
+.plan-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:99px;margin-left:auto;flex-shrink:0}
+
+/* ── Pantry overview ── */
+.pantry-mini{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pm-card{border-radius:10px;padding:11px 12px;cursor:pointer;transition:opacity .15s}
+.pm-card:hover{opacity:.85}
+.pm-card .pmc-label{font-size:11px;font-weight:700;margin-bottom:4px}
+.pm-card .pmc-count{font-size:20px;font-weight:800}
+.pm-card .pmc-items{font-size:10px;margin-top:2px;opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ── Shopping list ── */
+.shop-item{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 0;border-bottom:1px solid var(--border);
+}
+.shop-item:last-child{border-bottom:none}
+.shop-cb{width:17px;height:17px;border-radius:4px;border:1.5px solid var(--border);cursor:pointer;flex-shrink:0;appearance:none;-webkit-appearance:none;transition:all .15s}
+.shop-cb:checked{background:var(--teal);border-color:var(--teal);background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 10 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 4l3 3 5-6' stroke='white' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center;background-size:10px}
+.shop-label{font-size:13px;color:var(--text);font-weight:500;flex:1}
+.shop-qty{font-size:11px;color:var(--muted)}
+.shop-cb:checked + .shop-label{text-decoration:line-through;color:var(--muted)}
+
+/* ── Generate section ── */
+.gen-wrap{max-width:560px}
+
+/* Steps */
+.step-tabs{display:flex;gap:6px;margin-bottom:20px}
+.step-tab{
+  flex:1;padding:9px;border-radius:8px;text-align:center;
+  font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;
+  border:1.5px solid var(--border);color:var(--muted);background:#fafafa;
+}
+.step-tab.active{background:var(--purple);color:#fff;border-color:var(--purple)}
+.step-tab.done{background:var(--teal-l);color:var(--teal);border-color:var(--teal)}
+
+.gen-step{display:none}
+.gen-step.active{display:block}
+
+/* Form elements */
+.flbl{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
+input[type=text],input[type=number],select,textarea{
+  width:100%;font-size:14px;padding:10px 12px;
+  border:1.5px solid var(--border);border-radius:var(--radius-sm);
+  background:var(--white);color:var(--text);margin-bottom:14px;font-family:inherit;
+  transition:border-color .2s;-webkit-appearance:none;
+}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--purple)}
+textarea{resize:vertical;min-height:60px}
+
+.fam-grp{display:flex;gap:7px;margin-bottom:14px}
+.fam-btn{flex:1;padding:10px 4px;font-size:14px;font-weight:700;border-radius:8px;cursor:pointer;border:1.5px solid var(--border);background:#fafafa;color:var(--muted);transition:all .15s}
+.fam-btn.sel{background:var(--purple);color:#fff;border-color:var(--purple)}
+
+.opt-cards{display:flex;gap:8px;margin-bottom:14px}
+.opt-card{flex:1;border:1.5px solid var(--border);border-radius:10px;padding:12px 6px;text-align:center;cursor:pointer;background:#fafafa;transition:all .15s}
+.opt-card .oi{font-size:22px;margin-bottom:4px}
+.opt-card .ol{font-size:12px;font-weight:700;color:var(--text)}
+.opt-card .od{font-size:10px;color:var(--muted);margin-top:2px}
+.opt-card.sel-purple{border-color:var(--purple);background:var(--purple-l)}
+.opt-card.sel-coral{border-color:var(--coral);background:var(--coral-l)}
+.opt-card.sel-teal{border-color:var(--teal);background:var(--teal-l)}
+.opt-card.sel-orange{border-color:var(--orange);background:var(--orange-l)}
+.opt-card.sel-cyan{border-color:#00BCD4;background:var(--teal-l)}
+.opt-card.sel-pink{border-color:var(--pink);background:var(--pink-l)}
+
+/* Pantry rows */
+.pantry-sec{margin-bottom:14px}
+.cat-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:99px;margin-bottom:8px;font-size:12px;font-weight:700}
+.cp-v{background:var(--green-l);color:var(--green)}
+.cp-s{background:var(--yellow-l);color:#E65100}
+.cp-d{background:var(--blue-l);color:var(--blue)}
+.cp-p{background:var(--red-l);color:var(--red)}
+.p-row{display:flex;gap:5px;align-items:center;margin-bottom:6px}
+.p-row input[type=text]{flex:1;margin-bottom:0;font-size:13px;padding:8px 9px}
+.p-row input[type=number]{width:56px;margin-bottom:0;font-size:13px;padding:8px 6px}
+.p-row select.unit{width:58px;margin-bottom:0;font-size:12px;padding:8px 4px}
+.vn-tog{display:flex;border:1.5px solid var(--border);border-radius:7px;overflow:hidden}
+.vn-btn{padding:6px 7px;font-size:10px;font-weight:800;border:none;cursor:pointer;background:#fafafa;color:var(--muted)}
+.vn-btn.v-sel{background:var(--teal);color:#fff}
+.vn-btn.nv-sel{background:var(--coral);color:#fff}
+.rm-btn{background:none;border:none;cursor:pointer;color:#ccc;font-size:18px;padding:0;flex-shrink:0;line-height:1}
+.rm-btn:hover{color:var(--coral)}
+.add-btn{font-size:12px;font-weight:700;border:none;background:none;cursor:pointer;display:inline-flex;align-items:center;gap:3px;padding:2px 0;margin-bottom:2px}
+.av{color:var(--green)}.as{color:#E65100}.ad{color:var(--blue)}.ap{color:var(--red)}
+
+/* Buttons */
+.btn-primary{width:100%;padding:13px;color:#fff;border:none;border-radius:var(--radius-sm);font-size:15px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--purple),var(--coral));transition:opacity .15s;margin-top:6px}
+.btn-primary:hover{opacity:.9}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+.btn-back{background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px;font-weight:600;padding:0;margin-bottom:14px;display:inline-flex;align-items:center;gap:4px}
+.btn-back:hover{color:var(--purple)}
+.btn-sec{padding:10px 20px;border-radius:var(--radius-sm);border:1.5px solid var(--purple);color:var(--purple);background:none;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s}
+.btn-sec:hover{background:var(--purple-l)}
+
+/* Spinner */
+.loading{text-align:center;padding:48px 16px}
+.spinner{width:48px;height:48px;margin:0 auto 16px;border:4px solid var(--purple-l);border-top-color:var(--purple);border-radius:50%;animation:spin .75s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading h3{font-size:16px;font-weight:700;color:var(--text);margin-bottom:6px}
+.loading p{font-size:13px;color:var(--muted)}
+
+/* Plan output */
+.day-card{border-radius:10px;overflow:hidden;margin-bottom:10px;border:1px solid #eee}
+.day-head{padding:9px 14px;font-size:13px;font-weight:800;color:#fff;display:flex;justify-content:space-between;align-items:center}
+.d0{background:linear-gradient(135deg,#7B2FF7,#9C27B0)}
+.d1{background:linear-gradient(135deg,#FF5722,#FF9800)}
+.d2{background:linear-gradient(135deg,#00BCD4,#00BFA5)}
+.d3{background:linear-gradient(135deg,#E91E63,#FF5722)}
+.d4{background:linear-gradient(135deg,#3F51B5,#7B2FF7)}
+.d5{background:linear-gradient(135deg,#009688,#00BCD4)}
+.d6{background:linear-gradient(135deg,#FF9800,#FFC107)}
+.meal-row{padding:9px 14px;border-top:1px solid #f5f5f5;background:#fff}
+.m-tag{display:inline-block;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;padding:2px 7px;border-radius:99px;margin-bottom:4px}
+.tb{background:#FFF3E0;color:#E65100}.tl{background:#E8F5E9;color:#2E7D32}.td{background:#EDE7F6;color:#4527A0}
+.m-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
+.m-recipe{font-size:12px;color:var(--muted);line-height:1.5}
+.m-uses{margin-top:5px;font-size:11px;color:var(--purple-d);background:var(--purple-l);border-radius:6px;padding:4px 8px}
+.plan-scroll{max-height:60vh;overflow-y:auto;padding-right:2px}
+.plan-scroll::-webkit-scrollbar{width:4px}
+.plan-scroll::-webkit-scrollbar-thumb{background:#d0b8fc;border-radius:2px}
+
+/* Plan action row */
+.act-row{display:flex;gap:8px;margin-top:14px}
+.act-row .btn-sec{flex:1}
+.act-row .btn-primary{flex:1;margin-top:0}
+
+/* Badges */
+.badge{display:inline-block;font-size:10px;padding:3px 9px;border-radius:99px;font-weight:700}
+.bp{background:var(--purple-l);color:var(--purple-d)}
+.bc{background:var(--coral-l);color:#BF360C}
+.bt{background:var(--teal-l);color:#00695C}
+.bo{background:var(--orange-l);color:#E65100}
+
+/* Error */
+.err{background:var(--coral-l);border:1.5px solid var(--coral);border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;color:#BF360C;margin-top:10px}
+
+/* Saved plans section */
+.plans-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.plan-card{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:transform .15s}
+.plan-card:hover{transform:translateY(-2px)}
+.plan-card-header{padding:14px 16px;color:#fff;font-weight:700;font-size:14px}
+.plan-card-body{padding:14px 16px}
+.plan-card-meta{font-size:12px;color:var(--muted);margin-bottom:8px;display:flex;gap:6px;flex-wrap:wrap}
+.plan-card-preview{font-size:12px;color:var(--text);line-height:1.5}
+
+/* Plan detail modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:none;align-items:center;justify-content:center;padding:16px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);border-radius:var(--radius);max-width:560px;width:100%;max-height:85vh;overflow-y:auto;padding:24px}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.modal-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted)}
+
+/* Pantry section full */
+.pantry-full .save-bar{position:sticky;bottom:0;background:var(--white);padding:12px 0 0;margin-top:10px;border-top:1px solid var(--border)}
+
+/* Shopping section */
+.shop-cats{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.shop-cat-card{background:var(--white);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+.shop-cat-header{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.shop-cat-pill{font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px}
+.empty-state{text-align:center;padding:32px 16px;color:var(--muted)}
+.empty-state .es-icon{font-size:40px;margin-bottom:10px}
+.empty-state p{font-size:14px}
+
+/* FAB */
+.fab{
+  position:fixed;bottom:24px;right:24px;
+  background:linear-gradient(135deg,var(--purple),var(--coral));
+  color:#fff;border:none;border-radius:99px;
+  padding:14px 22px;font-size:14px;font-weight:700;
+  cursor:pointer;box-shadow:0 4px 20px rgba(123,47,247,.4);
+  display:flex;align-items:center;gap:8px;
+  transition:transform .15s,box-shadow .15s;z-index:50;
+}
+.fab:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(123,47,247,.5)}
+
+/* Mobile overlay */
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:90}
+
+/* Bottom nav (mobile) */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid var(--border);padding:6px 0;z-index:200}
+.bn-items{display:flex;justify-content:space-around}
+.bn-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 12px;cursor:pointer;border-radius:8px}
+.bn-item .bi{font-size:20px}
+.bn-item .bl{font-size:10px;font-weight:600;color:var(--muted)}
+.bn-item.active .bl{color:var(--purple)}
+
+/* Responsive */
+@media(max-width:900px){
+  .two-col{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:repeat(3,1fr)}
+  .shop-cats{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .sidebar-overlay.open{display:block}
+  .topbar{display:flex}
+  .main{margin-left:0;padding:80px 16px 80px}
+  .bottom-nav{display:block}
+  .fab{bottom:80px;right:16px;padding:12px 18px;font-size:13px}
+  .stats-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .stats-grid .stat-card:last-child{grid-column:1/-1}
+  .plans-grid{grid-template-columns:1fr}
+  .shop-cats{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile topbar -->
+<div class="topbar">
+  <div class="topbar-logo">
+    <span style="font-size:22px">🍛</span>
+    <span>Pantry Pandit</span>
+  </div>
+  <div class="topbar-right">
+    <div class="top-avatar" id="topAvatar">?</div>
+    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+  </div>
+</div>
+
+<!-- Sidebar overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <span class="sl">🍛</span>
+    <span class="sn">Pantry Pandit</span>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Menu</div>
+    <div class="nav-item active" onclick="navTo('home',this)"    data-s="home">    <span class="ni">🏠</span> Home</div>
+    <div class="nav-item"        onclick="navTo('plans',this)"   data-s="plans">   <span class="ni">🍽️</span> My Plans</div>
+    <div class="nav-item"        onclick="navTo('pantry',this)"  data-s="pantry">  <span class="ni">🧺</span> Pantry</div>
+    <div class="nav-item"        onclick="navTo('shopping',this)"data-s="shopping"><span class="ni">🛒</span> Shopping List</div>
+    <div class="nav-item"        onclick="navTo('generate',this)"data-s="generate"><span class="ni">✨</span> Generate Plan</div>
+  </div>
+  <div class="sidebar-bottom">
+    <div class="user-chip" id="userChip">
+      <div class="user-avatar" id="sideAvatar">?</div>
+      <div class="user-info">
+        <div class="un" id="sideUserName">Loading…</div>
+        <div class="ue" id="sideUserEmail"></div>
+      </div>
+    </div>
+    <div class="logout-btn" onclick="doLogout()">🚪 Sign out</div>
+  </div>
+</div>
+
+<!-- Main -->
+<div class="main">
+
+  <!-- ── HOME ── -->
+  <div class="section active" id="sec-home">
+    <div class="greeting" id="greeting">Good morning! 👋</div>
+    <div class="greeting-sub" id="greetingSub">Here's your kitchen overview</div>
+
+    <div class="stats-grid">
+      <div class="stat-card sc-purple">
+        <div class="sc-val" id="statPlans">0</div>
+        <div class="sc-lbl">Plans generated</div>
+      </div>
+      <div class="stat-card sc-coral">
+        <div class="sc-val" id="statPantry">0</div>
+        <div class="sc-lbl">Pantry items</div>
+      </div>
+      <div class="stat-card sc-teal">
+        <div class="sc-val" id="statShop">0</div>
+        <div class="sc-lbl">Shopping items</div>
+      </div>
+    </div>
+
+    <!-- Weekly Calendar -->
+    <div class="section-header">
+      <div class="section-title">📅 This Week</div>
+      <button class="section-action" onclick="navTo('generate',document.querySelector('[data-s=generate]'))">+ New Plan</button>
+    </div>
+    <div class="cal-wrap">
+      <div class="cal-grid" id="calGrid"><!-- filled by JS --></div>
+    </div>
+
+    <!-- Two col: plan history + pantry mini -->
+    <div class="two-col">
+      <div class="dash-card">
+        <div class="card-title">🕐 Recent Plans</div>
+        <div id="recentPlans"><div style="font-size:13px;color:var(--muted);">No plans yet — generate one!</div></div>
+      </div>
+      <div class="dash-card">
+        <div class="card-title">🧺 Pantry Overview</div>
+        <div class="pantry-mini" id="pantryMini">
+          <div class="pm-card" style="background:var(--green-l)" onclick="navTo('pantry',document.querySelector('[data-s=pantry]'))">
+            <div class="pmc-label" style="color:var(--green)">🥦 Vegetables</div>
+            <div class="pmc-count" style="color:var(--green)" id="pvCount">0</div>
+            <div class="pmc-items" style="color:var(--green)" id="pvItems">Add items</div>
+          </div>
+          <div class="pm-card" style="background:var(--yellow-l)" onclick="navTo('pantry',document.querySelector('[data-s=pantry]'))">
+            <div class="pmc-label" style="color:#E65100">🌶️ Spices</div>
+            <div class="pmc-count" style="color:#E65100" id="psCount">0</div>
+            <div class="pmc-items" style="color:#E65100" id="psItems">Add items</div>
+          </div>
+          <div class="pm-card" style="background:var(--blue-l)" onclick="navTo('pantry',document.querySelector('[data-s=pantry]'))">
+            <div class="pmc-label" style="color:var(--blue)">🥛 Dairy</div>
+            <div class="pmc-count" style="color:var(--blue)" id="pdCount">0</div>
+            <div class="pmc-items" style="color:var(--blue)" id="pdItems">Add items</div>
+          </div>
+          <div class="pm-card" style="background:var(--red-l)" onclick="navTo('pantry',document.querySelector('[data-s=pantry]'))">
+            <div class="pmc-label" style="color:var(--red)">🥩 Proteins</div>
+            <div class="pmc-count" style="color:var(--red)" id="ppCount">0</div>
+            <div class="pmc-items" style="color:var(--red)" id="ppItems">Add items</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MY PLANS ── -->
+  <div class="section" id="sec-plans">
+    <div class="section-header">
+      <div>
+        <div class="greeting" style="font-size:20px">🍽️ My Plans</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">All your saved meal plans</div>
+      </div>
+      <button class="btn-sec" onclick="navTo('generate',document.querySelector('[data-s=generate]'))">✨ New Plan</button>
+    </div>
+    <div class="plans-grid" id="plansGrid">
+      <div class="empty-state"><div class="es-icon">🍛</div><p>No plans yet.<br>Generate your first meal plan!</p></div>
+    </div>
+  </div>
+
+  <!-- ── PANTRY ── -->
+  <div class="section pantry-full" id="sec-pantry">
+    <div class="greeting" style="font-size:20px;margin-bottom:4px">🧺 My Pantry</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:20px">Keep this updated for better AI recommendations</div>
+
+    <div style="max-width:560px">
+      <div class="pantry-sec">
+        <div class="cat-pill cp-v">🥦 Fresh Vegetables</div>
+        <div id="pVegList">
+          <div class="p-row"><input type="text" class="pn" placeholder="e.g. tomato"/><input type="number" class="pq" placeholder="2" min="0" step="0.1"/><select class="unit"><option>KG</option><option>Pcs</option></select><button class="rm-btn" onclick="rmRow(this)">×</button></div>
+        </div>
+        <button class="add-btn av" onclick="addRow('pVegList','vegetable')">＋ Add vegetable</button>
+      </div>
+      <div class="pantry-sec">
+        <div class="cat-pill cp-s">🌶️ Spices & Dry Goods</div>
+        <div id="pSpiceList">
+          <div class="p-row"><input type="text" class="pn" placeholder="e.g. turmeric"/><input type="number" class="pq" placeholder="100" min="0"/><select class="unit"><option>KG</option><option>Pcs</option></select><button class="rm-btn" onclick="rmRow(this)">×</button></div>
+        </div>
+        <button class="add-btn as" onclick="addRow('pSpiceList','spice')">＋ Add spice</button>
+      </div>
+      <div class="pantry-sec">
+        <div class="cat-pill cp-d">🥛 Dairy</div>
+        <div id="pDairyList">
+          <div class="p-row"><input type="text" class="pn" placeholder="e.g. curd"/><input type="number" class="pq" placeholder="500" min="0"/><select class="unit"><option>KG</option><option>Pcs</option></select><button class="rm-btn" onclick="rmRow(this)">×</button></div>
+        </div>
+        <button class="add-btn ad" onclick="addRow('pDairyList','dairy item')">＋ Add dairy item</button>
+      </div>
+      <div class="pantry-sec">
+        <div class="cat-pill cp-p">🥩 Veg / Non-Veg Proteins</div>
+        <p style="font-size:11px;color:var(--muted);margin-bottom:8px">Tag each item — Pandit uses this to separate veg & non-veg days</p>
+        <div id="pProtList">
+          <div class="p-row"><input type="text" class="pn" placeholder="e.g. paneer"/><input type="number" class="pq" placeholder="250" min="0" step="0.1"/><select class="unit"><option>KG</option><option>Pcs</option></select><div class="vn-tog"><button class="vn-btn v-sel" onclick="togVN(this,'v')">V</button><button class="vn-btn" onclick="togVN(this,'nv')">NV</button></div><button class="rm-btn" onclick="rmRow(this)">×</button></div>
+        </div>
+        <button class="add-btn ap" onclick="addProt('pProtList')">＋ Add protein item</button>
+      </div>
+      <div class="save-bar">
+        <button class="btn-primary" onclick="savePantry()" id="savePantryBtn">💾 Save Pantry</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SHOPPING ── -->
+  <div class="section" id="sec-shopping">
+    <div class="section-header">
+      <div>
+        <div class="greeting" style="font-size:20px">🛒 Shopping List</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">Auto-generated from your latest plan</div>
+      </div>
+      <button class="btn-sec" onclick="clearChecked()">Clear checked</button>
+    </div>
+    <div class="shop-cats" id="shopCats">
+      <div class="empty-state" style="grid-column:1/-1"><div class="es-icon">🛒</div><p>Generate a meal plan first.<br>Your shopping list will appear here!</p></div>
+    </div>
+  </div>
+
+  <!-- ── GENERATE ── -->
+  <div class="section" id="sec-generate">
+    <div class="greeting" style="font-size:20px;margin-bottom:4px">✨ Generate Meal Plan</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:20px">AI builds recipes around your pantry</div>
+
+    <div class="gen-wrap">
+      <!-- Step tabs -->
+      <div class="step-tabs">
+        <div class="step-tab active" id="gt1">1 · Preferences</div>
+        <div class="step-tab" id="gt2">2 · Pantry</div>
+        <div class="step-tab" id="gt3">3 · Plan Type</div>
+      </div>
+
+      <!-- Step 1: Preferences -->
+      <div class="gen-step active" id="gs1">
+        <label class="flbl">Family size</label>
+        <div class="fam-grp">
+          <button class="fam-btn" onclick="selFam(this)" data-v="1">1</button>
+          <button class="fam-btn" onclick="selFam(this)" data-v="2">2</button>
+          <button class="fam-btn sel" onclick="selFam(this)" data-v="3-4">3–4</button>
+          <button class="fam-btn" onclick="selFam(this)" data-v="5+">5+</button>
+        </div>
+        <label class="flbl">Dietary preference</label>
+        <div class="opt-cards" id="dietCards">
+          <div class="opt-card sel-teal" onclick="selOpt(this,'dietCards','sel-teal','vegetarian')"><div class="oi">🥗</div><div class="ol">Vegetarian</div></div>
+          <div class="opt-card" onclick="selOpt(this,'dietCards','sel-coral','non-vegetarian')"><div class="oi">🍗</div><div class="ol">Non-veg</div></div>
+          <div class="opt-card" onclick="selOpt(this,'dietCards','sel-orange','eggetarian')"><div class="oi">🥚</div><div class="ol">Eggetarian</div></div>
+        </div>
+        <label class="flbl">Allergies / avoid (optional)</label>
+        <input type="text" id="gAllergies" placeholder="e.g. peanuts, gluten"/>
+        <button class="btn-primary" onclick="genGoTo(2)">Next →</button>
+      </div>
+
+      <!-- Step 2: Pantry -->
+      <div class="gen-step" id="gs2">
+        <button class="btn-back" onclick="genGoTo(1)">← Back</button>
+        <div class="pantry-sec">
+          <div class="cat-pill cp-v">🥦 Fresh Vegetables</div>
+          <div id="gVegList">
+            <div class="p-row"><input type="text" class="pn" placeholder="e.g. tomato"/><input type="number" class="pq" placeholder="2" min="0" step="0.1"/><select class="unit"><option>KG</option><option>Pcs</option></select><button class="rm-btn" onclick="rmRow(this)">×</button></div>
+          </div>
+          <button class="add-btn av" onclick="addRow('gVegList','vegetable')">＋ Add vegetable</button>
+        </div>
+        <div class="pantry-sec">
+          <div class="cat-pill cp-s">🌶️ Spices & Dry Goods</div>
+          <div id="gSpiceList">
+            <div class="p-row"><input type="text" class="pn" placeholder="e.g. turmeric"/><input type="number" class="pq" placeholder="100" min="0"/><select class="unit"><option>KG</option><option>Pcs</option></select><button class="rm-btn" onclick="rmRow(this)">×</button></div>
+          </div>
+          <button class="add-btn as" onclick="addRow('gSpiceList','spice')">＋ Add spice</button>
+        </div>
+        <div class="pantry-sec">
+          <div class="cat-pill cp-d">🥛 Dairy</div>
+          <div id="gDairyList">
+            <div class="p-row"><input type="text" class="pn" placeholder="e.g. curd"/><input type="number" class="pq" placeholder="500" min="0"/><select class="unit"><option>KG</option><option>Pcs</option></select><button class="rm-btn" onclick="rmRow(this)">×</button></div>
+          </div>
+          <button class="add-btn ad" onclick="addRow('gDairyList','dairy item')">＋ Add dairy item</button>
+        </div>
+        <div class="pantry-sec">
+          <div class="cat-pill cp-p">🥩 Veg / Non-Veg Proteins</div>
+          <div id="gProtList">
+            <div class="p-row"><input type="text" class="pn" placeholder="e.g. paneer"/><input type="number" class="pq" placeholder="250" min="0"/><select class="unit"><option>KG</option><option>Pcs</option></select><div class="vn-tog"><button class="vn-btn v-sel" onclick="togVN(this,'v')">V</button><button class="vn-btn" onclick="togVN(this,'nv')">NV</button></div><button class="rm-btn" onclick="rmRow(this)">×</button></div>
+          </div>
+          <button class="add-btn ap" onclick="addProt('gProtList')">＋ Add protein item</button>
+        </div>
+        <button class="btn-primary" onclick="genGoTo(3)">Next →</button>
+      </div>
+
+      <!-- Step 3: Plan type -->
+      <div class="gen-step" id="gs3">
+        <button class="btn-back" onclick="genGoTo(2)">← Back</button>
+        <label class="flbl">Cuisine style</label>
+        <div class="opt-cards" id="cuisineCards">
+          <div class="opt-card sel-coral" onclick="selOpt(this,'cuisineCards','sel-coral','South Indian')"><div class="oi">🏛️</div><div class="ol">South Indian</div><div class="od">Idli, dosa, sambar</div></div>
+          <div class="opt-card" onclick="selOpt(this,'cuisineCards','sel-orange','North Indian')"><div class="oi">🕌</div><div class="ol">North Indian</div><div class="od">Roti, dal, sabzi</div></div>
+        </div>
+        <label class="flbl">Plan type</label>
+        <div class="opt-cards" id="planCards">
+          <div class="opt-card sel-purple" onclick="selOpt(this,'planCards','sel-purple','one-time');toggleFest(false)"><div class="oi">📅</div><div class="ol">One-time</div><div class="od">Today's meals</div></div>
+          <div class="opt-card" onclick="selOpt(this,'planCards','sel-cyan','weekly');toggleFest(false)"><div class="oi">🗓️</div><div class="ol">Weekly</div><div class="od">7-day plan</div></div>
+          <div class="opt-card" onclick="selOpt(this,'planCards','sel-pink','festival');toggleFest(true)"><div class="oi">🪔</div><div class="ol">Festival</div><div class="od">Occasion menu</div></div>
+        </div>
+        <div id="festDiv" style="display:none">
+          <label class="flbl">Festival / occasion name</label>
+          <input type="text" id="festName" placeholder="e.g. Diwali, Pongal, Eid…"/>
+        </div>
+        <button class="btn-primary" onclick="runGenerate()">✨ Generate My Plan</button>
+        <div id="genErr" class="err" style="display:none"></div>
+      </div>
+
+      <!-- Step 4: Loading -->
+      <div class="gen-step" id="gs4">
+        <div class="loading">
+          <div class="spinner"></div>
+          <h3>Pantry Pandit is cooking…</h3>
+          <p id="loadMsg">Scanning your pantry ingredients</p>
+        </div>
+      </div>
+
+      <!-- Step 5: Result -->
+      <div class="gen-step" id="gs5">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <div style="font-size:16px;font-weight:800;color:var(--text)">Your Plan 🎉</div>
+          <button class="btn-sec" style="padding:6px 12px;font-size:12px" onclick="genGoTo(1)">Edit</button>
+        </div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px" id="planBadges"></div>
+        <div class="plan-scroll" id="planOut"></div>
+        <div class="act-row">
+          <button class="btn-sec" onclick="runGenerate()">🔄 Regenerate</button>
+          <button class="btn-primary" style="margin-top:0" onclick="window.print()">🖨️ Print</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- .main -->
+
+<!-- Plan detail modal -->
+<div class="modal-overlay" id="planModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div style="font-size:16px;font-weight:800" id="modalTitle">Plan Details</div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<!-- FAB -->
+<button class="fab" onclick="navTo('generate',document.querySelector('[data-s=generate]'))">✨ Generate Plan</button>
+
+<!-- Bottom nav (mobile) -->
+<div class="bottom-nav">
+  <div class="bn-items">
+    <div class="bn-item active" onclick="navTo('home',this)" data-s="home"><span class="bi">🏠</span><span class="bl">Home</span></div>
+    <div class="bn-item" onclick="navTo('plans',this)" data-s="plans"><span class="bi">🍽️</span><span class="bl">Plans</span></div>
+    <div class="bn-item" onclick="navTo('pantry',this)" data-s="pantry"><span class="bi">🧺</span><span class="bl">Pantry</span></div>
+    <div class="bn-item" onclick="navTo('shopping',this)" data-s="shopping"><span class="bi">🛒</span><span class="bl">Shopping</span></div>
+    <div class="bn-item" onclick="navTo('generate',this)" data-s="generate"><span class="bi">✨</span><span class="bl">Generate</span></div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp }           from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, getDoc, setDoc, collection, addDoc, getDocs, query, orderBy, updateDoc }
+                                   from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const { firebaseConfig } = await import('./firebase-config.js');
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+let currentUser = null;
+let userData    = {};
+let userPantry  = { vegetables:[], spices:[], dairy:[], proteins:[] };
+let allPlans    = [];
+let shopList    = [];
+
+// ── Auth guard ─────────────────────────────────────────────
+onAuthStateChanged(auth, async user => {
+  if (!user) { window.location.href = '/'; return; }
+  currentUser = user;
+  await loadAll(user);
+  setupUI(user);
+});
+
+async function loadAll(user) {
+  const [profSnap, pantrySnap, shopSnap] = await Promise.all([
+    getDoc(doc(db,'users',user.uid)),
+    getDoc(doc(db,'users',user.uid,'data','pantry')),
+    getDoc(doc(db,'users',user.uid,'data','shopping'))
+  ]);
+  if (profSnap.exists())  userData    = profSnap.data();
+  if (pantrySnap.exists())userPantry  = pantrySnap.data();
+  if (shopSnap.exists())  shopList    = shopSnap.data().items || [];
+
+  const q = query(collection(db,'users',user.uid,'plans'), orderBy('createdAt','desc'));
+  const snap = await getDocs(q);
+  allPlans = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+}
+
+// ── Setup UI ───────────────────────────────────────────────
+function setupUI(user) {
+  const name = userData.name || user.displayName || 'Friend';
+  const initials = name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+
+  // Greeting
+  const h = new Date().getHours();
+  document.getElementById('greeting').textContent =
+    (h<12?'Good morning':h<17?'Good afternoon':'Good evening')+', '+name+'! '+(h<12?'🌅':h<17?'☀️':'🌙');
+  document.getElementById('greetingSub').textContent = 'Here\'s your kitchen overview';
+
+  // Avatars
+  if (user.photoURL) {
+    document.getElementById('sideAvatar').innerHTML = `<img src="${user.photoURL}" alt=""/>`;
+    document.getElementById('topAvatar').innerHTML  = `<img src="${user.photoURL}" alt=""/>`;
+  } else {
+    document.getElementById('sideAvatar').textContent = initials;
+    document.getElementById('topAvatar').textContent  = initials;
+  }
+  document.getElementById('sideUserName').textContent  = name;
+  document.getElementById('sideUserEmail').textContent = user.email || '';
+
+  // Pre-fill generate form
+  if (userData.familySize) {
+    document.querySelectorAll('.fam-btn').forEach(b => {
+      b.classList.toggle('sel', b.dataset.v === userData.familySize);
+    });
+  }
+
+  populateStats();
+  buildCalendar();
+  renderRecentPlans();
+  renderPantryOverview();
+  renderShoppingList();
+  prefillPantrySection();
+  prefillGenPantry();
+}
+
+// ── Stats ──────────────────────────────────────────────────
+function populateStats() {
+  const allItems = [
+    ...(userPantry.vegetables||[]),
+    ...(userPantry.spices||[]),
+    ...(userPantry.dairy||[]),
+    ...(userPantry.proteins||[])
+  ];
+  document.getElementById('statPlans').textContent  = allPlans.length;
+  document.getElementById('statPantry').textContent = allItems.filter(i=>i.name).length;
+  document.getElementById('statShop').textContent   = shopList.length;
+}
+
+// ── Calendar ───────────────────────────────────────────────
+function buildCalendar() {
+  const grid = document.getElementById('calGrid');
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const mealTypes = ['Breakfast','Lunch','Dinner'];
+  const today = new Date().getDay(); // 0=Sun,1=Mon…
+
+  // Find latest weekly plan
+  const weeklyPlan = allPlans.find(p => p.planType === 'weekly' && p.plan?.days);
+  const dayMap = {};
+  if (weeklyPlan?.plan?.days) {
+    weeklyPlan.plan.days.forEach(d => { dayMap[d.day] = d.meals || []; });
+  }
+
+  const fullDays = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  const todayIdx = today === 0 ? 6 : today - 1;
+
+  // Header row
+  grid.innerHTML = '<div></div>';
+  days.forEach((d,i) => {
+    const isToday = i === todayIdx;
+    grid.innerHTML += `<div class="cal-header" style="${isToday?'color:var(--purple);background:var(--purple-l);border-radius:8px;':''}">${d}${isToday?' ✦':''}</div>`;
+  });
+
+  // Meal rows
+  const rowLabels = [
+    {label:'🌅 B/fast', cls:'rb'},
+    {label:'☀️ Lunch',  cls:'rl'},
+    {label:'🌙 Dinner', cls:'rd'}
+  ];
+  rowLabels.forEach((row, ri) => {
+    grid.innerHTML += `<div class="cal-row-label ${row.cls}">${row.label}</div>`;
+    fullDays.forEach(day => {
+      const meals = dayMap[day] || [];
+      const meal  = meals.find(m => m.type === mealTypes[ri]);
+      if (meal) {
+        grid.innerHTML += `<div class="cal-cell has-meal" title="${meal.recipe||''}">${meal.name}</div>`;
+      } else {
+        grid.innerHTML += `<div class="cal-cell empty-cell">—</div>`;
+      }
+    });
+  });
+}
+
+// ── Recent plans ───────────────────────────────────────────
+function renderRecentPlans() {
+  const el = document.getElementById('recentPlans');
+  if (!allPlans.length) {
+    el.innerHTML = '<div style="font-size:13px;color:var(--muted)">No plans yet — generate one!</div>';
+    return;
+  }
+  const dotColors = { weekly:'var(--purple)', 'one-time':'var(--coral)', festival:'var(--pink)' };
+  el.innerHTML = allPlans.slice(0,4).map(p => {
+    const d = new Date(p.createdAt).toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+    return `<div class="plan-item" onclick="openPlanModal('${p.id}')">
+      <div class="plan-dot" style="background:${dotColors[p.planType]||'var(--purple)'}"></div>
+      <div class="plan-item-info">
+        <div class="pi-name">${p.cuisine} · ${p.planType}</div>
+        <div class="pi-meta">${d}</div>
+      </div>
+      <span class="plan-badge" style="background:var(--purple-l);color:var(--purple-d)">${p.planType}</span>
+    </div>`;
+  }).join('');
+}
+
+// ── Pantry overview ────────────────────────────────────────
+function renderPantryOverview() {
+  const cats = [
+    {id:'pv', key:'vegetables'}, {id:'ps', key:'spices'},
+    {id:'pd', key:'dairy'},      {id:'pp', key:'proteins'}
+  ];
+  cats.forEach(c => {
+    const items = (userPantry[c.key]||[]).filter(i=>i.name);
+    document.getElementById(c.id+'Count').textContent = items.length;
+    document.getElementById(c.id+'Items').textContent = items.slice(0,3).map(i=>i.name).join(', ') || 'Add items';
+  });
+}
+
+// ── Shopping list ──────────────────────────────────────────
+function renderShoppingList() {
+  const el = document.getElementById('shopCats');
+  if (!shopList.length) {
+    el.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">🛒</div><p>Generate a meal plan first.<br>Your shopping list will appear here!</p></div>';
+    return;
+  }
+  const cats = {
+    vegetables:{ label:'🥦 Vegetables', bg:  'var(--green-l)', color:'var(--green)' },
+    spices:    { label:'🌶️ Spices',     bg:'var(--yellow-l)', color:'#E65100'       },
+    dairy:     { label:'🥛 Dairy',       bg:   'var(--blue-l)', color:'var(--blue)'  },
+    proteins:  { label:'🥩 Proteins',    bg:    'var(--red-l)', color:'var(--red)'   },
+    other:     { label:'🛍️ Other',       bg:    'var(--bg)',    color:'var(--muted)' }
+  };
+  const grouped = {};
+  shopList.forEach(item => {
+    const k = item.category || 'other';
+    if (!grouped[k]) grouped[k] = [];
+    grouped[k].push(item);
+  });
+  el.innerHTML = Object.entries(grouped).map(([k,items]) => {
+    const cat = cats[k] || cats.other;
+    return `<div class="shop-cat-card">
+      <div class="shop-cat-header">
+        <span class="shop-cat-pill" style="background:${cat.bg};color:${cat.color}">${cat.label}</span>
+      </div>
+      ${items.map((item,idx) => `
+        <div class="shop-item">
+          <input type="checkbox" class="shop-cb" ${item.checked?'checked':''} onchange="toggleShop('${k}',${idx},this.checked)"/>
+          <span class="shop-label">${item.name}</span>
+          <span class="shop-qty">${item.qty||''} ${item.unit||''}</span>
+        </div>`).join('')}
+    </div>`;
+  }).join('');
+}
+
+// ── Prefill pantry section ─────────────────────────────────
+function prefillPantrySection() {
+  const maps = [
+    { listId:'pVegList',   key:'vegetables', ph:'vegetable',  proto:false },
+    { listId:'pSpiceList', key:'spices',     ph:'spice',      proto:false },
+    { listId:'pDairyList', key:'dairy',      ph:'dairy item', proto:false },
+    { listId:'pProtList',  key:'proteins',   ph:'protein',    proto:true  }
+  ];
+  maps.forEach(m => {
+    const items = (userPantry[m.key]||[]).filter(i=>i.name);
+    if (!items.length) return;
+    const list = document.getElementById(m.listId);
+    list.innerHTML = '';
+    items.forEach(item => {
+      list.appendChild(makeRow(item, m.proto));
+    });
+  });
+}
+
+function prefillGenPantry() {
+  const maps = [
+    { listId:'gVegList',   key:'vegetables' },
+    { listId:'gSpiceList', key:'spices'     },
+    { listId:'gDairyList', key:'dairy'      },
+    { listId:'gProtList',  key:'proteins', proto:true }
+  ];
+  maps.forEach(m => {
+    const items = (userPantry[m.key]||[]).filter(i=>i.name);
+    if (!items.length) return;
+    const list = document.getElementById(m.listId);
+    list.innerHTML = '';
+    items.forEach(item => list.appendChild(makeRow(item, !!m.proto)));
+  });
+}
+
+function makeRow(item, hasVN) {
+  const div = document.createElement('div');
+  div.className = 'p-row';
+  const vnHtml = hasVN ? `<div class="vn-tog">
+    <button class="vn-btn ${item.type!=='non-veg'?'v-sel':''}" onclick="togVN(this,'v')">V</button>
+    <button class="vn-btn ${item.type==='non-veg'?'nv-sel':''}" onclick="togVN(this,'nv')">NV</button>
+  </div>` : '';
+  div.innerHTML = `
+    <input type="text" class="pn" value="${item.name||''}" placeholder="item"/>
+    <input type="number" class="pq" value="${item.qty||''}" min="0" step="0.1"/>
+    <select class="unit"><option${item.unit==='KG'?' selected':''}>KG</option><option${item.unit==='Pcs'?' selected':''}>Pcs</option></select>
+    ${vnHtml}
+    <button class="rm-btn" onclick="rmRow(this)">×</button>`;
+  return div;
+}
+
+// ── Generate flow ──────────────────────────────────────────
+const G = { familySize:'3-4', diet:'vegetarian', allergies:'', cuisine:'South Indian', planType:'one-time', festival:'' };
+
+function genGoTo(step) {
+  document.querySelectorAll('.gen-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('gs'+step).classList.add('active');
+  document.querySelectorAll('.step-tab').forEach((t,i) => {
+    t.className = 'step-tab' + (i+1 === step ? ' active' : i+1 < step ? ' done' : '');
+  });
+}
+window.genGoTo = genGoTo;
+
+window.runGenerate = async function() {
+  G.festival  = document.getElementById('festName')?.value.trim() || '';
+  G.allergies = document.getElementById('gAllergies')?.value.trim() || '';
+
+  const pantry = {
+    vegetables: readList('gVegList', false),
+    spices:     readList('gSpiceList', false),
+    dairy:      readList('gDairyList', false),
+    proteins:   readList('gProtList', true)
+  };
+  const all = [...pantry.vegetables,...pantry.spices,...pantry.dairy,...pantry.proteins];
+  if (!all.length) {
+    const e = document.getElementById('genErr');
+    e.textContent = 'Please add at least one pantry item.'; e.style.display='block'; return;
+  }
+  document.getElementById('genErr').style.display='none';
+  genGoTo(4);
+
+  const msgs = ['Scanning your pantry…','Matching recipes…','Balancing flavours…','Crafting your plan…'];
+  let mi=0; const lm = document.getElementById('loadMsg');
+  const iv = setInterval(()=>{ lm.textContent = msgs[++mi%msgs.length]; },2200);
+
+  try {
+    const res = await fetch('/api/generate', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        profile:     { name: userData.name||'User', familySize:G.familySize, diet:G.diet, allergies:G.allergies },
+        pantry,
+        preferences: { cuisine:G.cuisine, planType:G.planType, festival:G.festival }
+      })
+    });
+    clearInterval(iv);
+    const data = await res.json();
+    if (!res.ok||!data.success) throw new Error(data.error||'Generation failed');
+
+    // Save to Firebase
+    const planDoc = {
+      cuisine: G.cuisine, planType: G.planType,
+      festival: G.festival, plan: data.plan,
+      createdAt: new Date().toISOString()
+    };
+    await addDoc(collection(db,'users',currentUser.uid,'plans'), planDoc);
+    allPlans.unshift({ id: 'new', ...planDoc });
+
+    // Build shopping list
+    await buildShoppingList(data.plan, pantry);
+
+    renderPlan(data.plan);
+    genGoTo(5);
+
+    // Refresh home
+    populateStats();
+    buildCalendar();
+    renderRecentPlans();
+
+  } catch(err) {
+    clearInterval(iv);
+    genGoTo(3);
+    const e = document.getElementById('genErr');
+    e.textContent = '❌ '+err.message; e.style.display='block';
+  }
+};
+
+async function buildShoppingList(plan, pantry) {
+  const usedItems = new Set();
+  const catMap = {};
+  // Map pantry items to categories
+  (pantry.vegetables||[]).forEach(i => catMap[i.name?.toLowerCase()] = { cat:'vegetables', qty:i.qty, unit:i.unit });
+  (pantry.spices||[]).forEach(i    => catMap[i.name?.toLowerCase()] = { cat:'spices', qty:i.qty, unit:i.unit });
+  (pantry.dairy||[]).forEach(i     => catMap[i.name?.toLowerCase()] = { cat:'dairy', qty:i.qty, unit:i.unit });
+  (pantry.proteins||[]).forEach(i  => catMap[i.name?.toLowerCase()] = { cat:'proteins', qty:i.qty, unit:i.unit });
+
+  const meals = plan.plan_type === 'weekly'
+    ? plan.days.flatMap(d => d.meals||[])
+    : plan.meals||[];
+
+  const items = [];
+  meals.forEach(m => {
+    (m.uses||[]).forEach(name => {
+      if (usedItems.has(name.toLowerCase())) return;
+      usedItems.add(name.toLowerCase());
+      const info = catMap[name.toLowerCase()] || {};
+      items.push({ name, category: info.cat||'other', qty: info.qty||'', unit: info.unit||'', checked: false });
+    });
+  });
+
+  shopList = items;
+  document.getElementById('statShop').textContent = items.length;
+  await setDoc(doc(db,'users',currentUser.uid,'data','shopping'), { items, updatedAt: new Date().toISOString() });
+  renderShoppingList();
+}
+
+function renderPlan(plan) {
+  const dc = ['d0','d1','d2','d3','d4','d5','d6'];
+  const mt = { Breakfast:'tb', Lunch:'tl', Dinner:'td' };
+
+  document.getElementById('planBadges').innerHTML = `
+    <span class="badge bc">${G.cuisine}</span>
+    <span class="badge bp">Family ${G.familySize}</span>
+    <span class="badge bt">${G.diet}</span>
+    <span class="badge bo">${G.planType === 'weekly' ? '7-day' : G.planType === 'festival' ? G.festival+' menu' : "Today"}</span>`;
+
+  const out = document.getElementById('planOut');
+  out.innerHTML = '';
+
+  if (plan.plan_type === 'weekly' && plan.days) {
+    plan.days.forEach((day,i) => {
+      const dc_el = document.createElement('div');
+      dc_el.className = 'day-card';
+      dc_el.innerHTML = `<div class="day-head ${dc[i%7]}">${day.day}</div>`;
+      (day.meals||[]).forEach(m => {
+        const mr = document.createElement('div'); mr.className='meal-row';
+        mr.innerHTML = `<span class="m-tag ${mt[m.type]||'tb'}">${m.type}</span><div class="m-name">${m.name}</div><div class="m-recipe">${m.recipe}</div>${m.uses?.length?`<div class="m-uses">🧺 ${m.uses.join(' · ')}</div>`:''}`;
+        dc_el.appendChild(mr);
+      });
+      out.appendChild(dc_el);
+    });
+  } else if (plan.meals) {
+    if (plan.title) { const t=document.createElement('div'); t.style.cssText='font-size:15px;font-weight:800;color:var(--purple-d);margin-bottom:12px'; t.textContent=plan.title; out.appendChild(t); }
+    plan.meals.forEach((m,i) => {
+      const dc_el = document.createElement('div'); dc_el.className='day-card';
+      dc_el.innerHTML = `<div class="day-head ${dc[i]}"><span class="m-tag ${mt[m.type]||'tb'}" style="background:rgba(255,255,255,0.25);color:#fff">${m.type}</span> ${m.name}</div><div class="meal-row"><div class="m-recipe">${m.recipe}</div>${m.uses?.length?`<div class="m-uses">🧺 ${m.uses.join(' · ')}</div>`:''}</div>`;
+      out.appendChild(dc_el);
+    });
+  }
+}
+
+// ── Pantry save ────────────────────────────────────────────
+window.savePantry = async function() {
+  const btn = document.getElementById('savePantryBtn');
+  btn.textContent='Saving…'; btn.disabled=true;
+  userPantry = {
+    vegetables: readList('pVegList',  false),
+    spices:     readList('pSpiceList', false),
+    dairy:      readList('pDairyList', false),
+    proteins:   readList('pProtList',  true)
+  };
+  await setDoc(doc(db,'users',currentUser.uid,'data','pantry'), { ...userPantry, updatedAt: new Date().toISOString() });
+  renderPantryOverview();
+  populateStats();
+  btn.textContent='✅ Saved!'; btn.disabled=false;
+  setTimeout(()=>{ btn.textContent='💾 Save Pantry'; },2000);
+};
+
+// ── Shopping ───────────────────────────────────────────────
+window.toggleShop = async function(cat, idx, checked) {
+  const item = shopList.find(i => i.category===cat && shopList.indexOf(i) === shopList.findIndex(x=>x.category===cat)+idx);
+  // Simple index approach
+  let catItems = shopList.filter(i => i.category===cat);
+  catItems[idx].checked = checked;
+  await setDoc(doc(db,'users',currentUser.uid,'data','shopping'), { items:shopList });
+};
+
+window.clearChecked = async function() {
+  shopList = shopList.filter(i => !i.checked);
+  await setDoc(doc(db,'users',currentUser.uid,'data','shopping'), { items:shopList });
+  renderShoppingList();
+  document.getElementById('statShop').textContent = shopList.length;
+};
+
+// ── Plan modal ─────────────────────────────────────────────
+window.openPlanModal = function(planId) {
+  const plan = allPlans.find(p=>p.id===planId);
+  if (!plan) return;
+  document.getElementById('modalTitle').textContent = `${plan.cuisine} · ${plan.planType}`;
+  const dc=['d0','d1','d2','d3','d4','d5','d6'];
+  const mt={Breakfast:'tb',Lunch:'tl',Dinner:'td'};
+  let html = `<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px">
+    <span class="badge bc">${plan.cuisine}</span>
+    <span class="badge bo">${plan.planType}</span>
+    <span class="badge bp">${new Date(plan.createdAt).toLocaleDateString('en-IN')}</span>
+  </div>`;
+  const p = plan.plan;
+  if (p?.plan_type==='weekly'&&p.days) {
+    p.days.forEach((day,i)=>{
+      html+=`<div class="day-card"><div class="day-head ${dc[i%7]}">${day.day}</div>`;
+      (day.meals||[]).forEach(m=>{
+        html+=`<div class="meal-row"><span class="m-tag ${mt[m.type]||'tb'}">${m.type}</span><div class="m-name">${m.name}</div><div class="m-recipe">${m.recipe}</div>${m.uses?.length?`<div class="m-uses">🧺 ${m.uses.join(' · ')}</div>`:''}</div>`;
+      });
+      html+='</div>';
+    });
+  } else if(p?.meals){
+    p.meals.forEach((m,i)=>{
+      html+=`<div class="day-card"><div class="day-head ${dc[i]}"><span class="m-tag ${mt[m.type]||'tb'}" style="background:rgba(255,255,255,.25);color:#fff">${m.type}</span> ${m.name}</div><div class="meal-row"><div class="m-recipe">${m.recipe}</div>${m.uses?.length?`<div class="m-uses">🧺 ${m.uses.join(' · ')}</div>`:''}</div></div>`;
+    });
+  }
+  document.getElementById('modalBody').innerHTML = html;
+  document.getElementById('planModal').classList.add('open');
+};
+window.closeModal = function(){ document.getElementById('planModal').classList.remove('open'); };
+
+// ── Plans section ──────────────────────────────────────────
+function renderPlansSection() {
+  const grid = document.getElementById('plansGrid');
+  if (!allPlans.length) {
+    grid.innerHTML='<div class="empty-state"><div class="es-icon">🍛</div><p>No plans yet.<br>Generate your first meal plan!</p></div>';
+    return;
+  }
+  const dc=['d0','d1','d2','d3','d4','d5','d6'];
+  grid.innerHTML = allPlans.map((p,i) => {
+    const meals = p.plan?.plan_type==='weekly' ? p.plan.days?.[0]?.meals||[] : p.plan?.meals||[];
+    const preview = meals.slice(0,2).map(m=>m.name).join(', ');
+    const d = new Date(p.createdAt).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'2-digit'});
+    return `<div class="plan-card" onclick="openPlanModal('${p.id}')">
+      <div class="plan-card-header ${dc[i%7]}">${p.cuisine} · ${p.planType==='one-time'?'Today\'s Plan':p.planType==='weekly'?'7-Day Plan':p.festival+' Menu'}</div>
+      <div class="plan-card-body">
+        <div class="plan-card-meta"><span class="badge bp">${p.planType}</span><span class="badge bt">${d}</span></div>
+        <div class="plan-card-preview">${preview||'Click to view full plan'}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Navigation ─────────────────────────────────────────────
+window.navTo = function(name, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.bn-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll(`[data-s="${name}"]`).forEach(n => n.classList.add('active'));
+  if (name==='plans') renderPlansSection();
+  if (window.innerWidth<=768) closeSidebar();
+};
+
+window.toggleSidebar = function() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('open');
+};
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+}
+
+window.doLogout = async function() {
+  await signOut(auth);
+  window.location.href = '/';
+};
+
+// ── Pantry helpers ─────────────────────────────────────────
+window.addRow = function(listId, ph) {
+  const d=document.createElement('div'); d.className='p-row';
+  d.innerHTML=`<input type="text" class="pn" placeholder="e.g. ${ph}"/><input type="number" class="pq" placeholder="1" min="0" step="0.1"/><select class="unit"><option>KG</option><option>Pcs</option></select><button class="rm-btn" onclick="rmRow(this)">×</button>`;
+  document.getElementById(listId).appendChild(d);
+};
+window.addProt = function(listId) {
+  const d=document.createElement('div'); d.className='p-row';
+  d.innerHTML=`<input type="text" class="pn" placeholder="e.g. fish"/><input type="number" class="pq" placeholder="1" min="0" step="0.1"/><select class="unit"><option>KG</option><option>Pcs</option></select><div class="vn-tog"><button class="vn-btn v-sel" onclick="togVN(this,'v')">V</button><button class="vn-btn" onclick="togVN(this,'nv')">NV</button></div><button class="rm-btn" onclick="rmRow(this)">×</button>`;
+  document.getElementById(listId).appendChild(d);
+};
+window.rmRow = function(btn) {
+  const r=btn.closest('.p-row'),l=r.parentElement;
+  if(l.querySelectorAll('.p-row').length>1) r.remove();
+};
+window.togVN = function(btn, type) {
+  btn.closest('.vn-tog').querySelectorAll('.vn-btn').forEach(b=>b.classList.remove('v-sel','nv-sel'));
+  btn.classList.add(type==='v'?'v-sel':'nv-sel');
+};
+
+function readList(id, hasVN) {
+  return [...document.querySelectorAll('#'+id+' .p-row')].reduce((acc,row)=>{
+    const name=row.querySelector('.pn').value.trim();
+    if(!name) return acc;
+    const item={name,qty:row.querySelector('.pq').value||'?',unit:row.querySelector('.unit').value};
+    if(hasVN) item.type=row.querySelector('.nv-sel')?'non-veg':'veg';
+    acc.push(item); return acc;
+  },[]);
+}
+
+// ── Cuisine / plan selectors ───────────────────────────────
+window.selFam = function(btn) {
+  btn.closest('.fam-grp').querySelectorAll('.fam-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  G.familySize = btn.dataset.v;
+};
+window.selOpt = function(card, groupId, cls, val) {
+  const all=['sel-purple','sel-coral','sel-teal','sel-orange','sel-cyan','sel-pink'];
+  document.getElementById(groupId).querySelectorAll('.opt-card').forEach(c=>all.forEach(x=>c.classList.remove(x)));
+  card.classList.add(cls);
+  if(groupId==='dietCards')    G.diet    = val;
+  if(groupId==='cuisineCards') G.cuisine = val;
+  if(groupId==='planCards')    G.planType= val;
+};
+window.toggleFest = function(show) {
+  document.getElementById('festDiv').style.display = show?'block':'none';
+};
+</script>
+</body>
+</html>

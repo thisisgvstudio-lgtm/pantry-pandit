@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pantry Pandit — Sign In</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --purple: #7B2FF7; --coral: #FF5722; --teal: #00BFA5;
+  --text: #1a1a2e; --muted: #666; --border: #e0e0e0;
+  --white: #fff; --radius: 16px; --radius-sm: 10px;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  min-height: 100vh; display: flex; -webkit-font-smoothing: antialiased;
+}
+/* Left branding panel */
+.brand-panel {
+  flex: 1; display: none;
+  background: linear-gradient(145deg, #4A00E0 0%, #7B2FF7 40%, #FF5722 100%);
+  flex-direction: column; align-items: center; justify-content: center;
+  padding: 48px; position: relative; overflow: hidden;
+}
+@media(min-width:768px) { .brand-panel { display: flex; } }
+.brand-panel::before {
+  content: ''; position: absolute; width: 400px; height: 400px;
+  border-radius: 50%; background: rgba(255,255,255,0.05);
+  top: -100px; right: -100px;
+}
+.brand-panel::after {
+  content: ''; position: absolute; width: 300px; height: 300px;
+  border-radius: 50%; background: rgba(255,255,255,0.05);
+  bottom: -80px; left: -80px;
+}
+.brand-logo { font-size: 48px; margin-bottom: 16px; }
+.brand-name { font-size: 36px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+.brand-tag  { font-size: 16px; color: rgba(255,255,255,0.75); text-align: center; line-height: 1.5; max-width: 280px; }
+.brand-features { margin-top: 40px; display: flex; flex-direction: column; gap: 14px; }
+.brand-feat {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(255,255,255,0.12); border-radius: 12px; padding: 12px 16px;
+}
+.brand-feat .fi { font-size: 20px; }
+.brand-feat span { font-size: 14px; color: rgba(255,255,255,0.9); font-weight: 500; }
+
+/* Right form panel */
+.form-panel {
+  width: 100%; max-width: 460px; background: var(--white);
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 40px 32px; overflow-y: auto;
+}
+@media(min-width:768px) { .form-panel { padding: 48px 40px; } }
+
+.mobile-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 32px; }
+@media(min-width:768px) { .mobile-logo { display: none; } }
+.mobile-logo .ml { font-size: 28px; }
+.mobile-logo .mn { font-size: 20px; font-weight: 800; background: linear-gradient(135deg,var(--purple),var(--coral)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+h2 { font-size: 26px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+.form-sub { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+
+/* Google button */
+.btn-google {
+  width: 100%; padding: 13px; border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); background: var(--white);
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  font-size: 15px; font-weight: 600; color: var(--text); cursor: pointer;
+  transition: all .15s; margin-bottom: 20px;
+}
+.btn-google:hover { border-color: #4285F4; background: #f8f8ff; }
+.btn-google svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+.or-div {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+}
+.or-div::before, .or-div::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+.or-div span { font-size: 12px; color: var(--muted); font-weight: 600; }
+
+label { display: block; font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+input[type=text], input[type=email], input[type=password] {
+  width: 100%; padding: 12px 14px; font-size: 14px;
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  color: var(--text); background: var(--white); margin-bottom: 16px;
+  font-family: inherit; transition: border-color .2s;
+}
+input:focus { outline: none; border-color: var(--purple); }
+
+.name-row { display: flex; gap: 12px; }
+.name-row > div { flex: 1; }
+
+.btn-primary {
+  width: 100%; padding: 13px; color: #fff; border: none;
+  border-radius: var(--radius-sm); font-size: 15px; font-weight: 700;
+  cursor: pointer; background: linear-gradient(135deg, var(--purple), var(--coral));
+  transition: opacity .15s; margin-top: 4px;
+}
+.btn-primary:hover { opacity: .9; }
+.btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+
+.toggle-auth {
+  text-align: center; margin-top: 20px; font-size: 14px; color: var(--muted);
+}
+.toggle-auth a { color: var(--purple); font-weight: 600; cursor: pointer; text-decoration: none; }
+.toggle-auth a:hover { text-decoration: underline; }
+
+.err-box {
+  background: #FBE9E7; border: 1.5px solid #FF5722; border-radius: var(--radius-sm);
+  padding: 10px 14px; font-size: 13px; color: #BF360C; margin-top: 12px;
+}
+#nameFields { display: none; }
+</style>
+</head>
+<body>
+
+<!-- Left branding -->
+<div class="brand-panel">
+  <div class="brand-logo">🍛</div>
+  <div class="brand-name">Pantry Pandit</div>
+  <div class="brand-tag">Your AI-powered Indian kitchen expert — plan meals from what you already have</div>
+  <div class="brand-features">
+    <div class="brand-feat"><span class="fi">🧺</span><span>Smart pantry tracking</span></div>
+    <div class="brand-feat"><span class="fi">✨</span><span>AI-generated recipes just for you</span></div>
+    <div class="brand-feat"><span class="fi">🗓️</span><span>Weekly meal plans in seconds</span></div>
+    <div class="brand-feat"><span class="fi">🛒</span><span>Auto shopping list</span></div>
+  </div>
+</div>
+
+<!-- Right form -->
+<div class="form-panel">
+  <div class="mobile-logo">
+    <span class="ml">🍛</span>
+    <span class="mn">Pantry Pandit</span>
+  </div>
+
+  <h2 id="formTitle">Welcome back</h2>
+  <p class="form-sub" id="formSub">Sign in to your kitchen dashboard</p>
+
+  <!-- Google -->
+  <button class="btn-google" id="btnGoogle">
+    <svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+    Continue with Google
+  </button>
+
+  <div class="or-div"><span>or</span></div>
+
+  <!-- Name fields (signup only) -->
+  <div id="nameFields">
+    <label>Full name</label>
+    <input type="text" id="fullName" placeholder="e.g. Kavya Reddy" />
+  </div>
+
+  <label>Email address</label>
+  <input type="email" id="emailInput" placeholder="you@email.com" />
+
+  <label>Password</label>
+  <input type="password" id="passInput" placeholder="Min 6 characters" />
+
+  <button class="btn-primary" id="btnSubmit">Sign In</button>
+  <div id="authErr" class="err-box" style="display:none;"></div>
+
+  <div class="toggle-auth">
+    <span id="toggleText">Don't have an account?</span>
+    <a id="toggleLink" onclick="toggleMode()"> Sign up free</a>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp }                          from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup,
+         signInWithEmailAndPassword, createUserWithEmailAndPassword,
+         onAuthStateChanged, updateProfile }       from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, setDoc, getDoc }       from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+// Load Firebase config
+const { firebaseConfig } = await import('./firebase-config.js');
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+// Redirect if already logged in
+onAuthStateChanged(auth, user => {
+  if (user) window.location.href = '/dashboard.html';
+});
+
+let isSignUp = false;
+
+window.toggleMode = function() {
+  isSignUp = !isSignUp;
+  document.getElementById('formTitle').textContent  = isSignUp ? 'Create account' : 'Welcome back';
+  document.getElementById('formSub').textContent    = isSignUp ? 'Join Pantry Pandit — it\'s free' : 'Sign in to your kitchen dashboard';
+  document.getElementById('btnSubmit').textContent  = isSignUp ? 'Create Account' : 'Sign In';
+  document.getElementById('toggleText').textContent = isSignUp ? 'Already have an account?' : "Don't have an account?";
+  document.getElementById('toggleLink').textContent = isSignUp ? ' Sign in' : ' Sign up free';
+  document.getElementById('nameFields').style.display = isSignUp ? 'block' : 'none';
+};
+
+// Google Sign-In
+document.getElementById('btnGoogle').onclick = async () => {
+  try {
+    const provider = new GoogleAuthProvider();
+    const result   = await signInWithPopup(auth, provider);
+    await ensureUserDoc(result.user);
+    window.location.href = '/dashboard.html';
+  } catch (e) { showErr(e.message); }
+};
+
+// Email Sign-In / Sign-Up
+document.getElementById('btnSubmit').onclick = async () => {
+  const email = document.getElementById('emailInput').value.trim();
+  const pass  = document.getElementById('passInput').value;
+  const name  = document.getElementById('fullName').value.trim();
+  clearErr();
+  try {
+    if (isSignUp) {
+      if (!name)  { showErr('Please enter your name'); return; }
+      if (!email) { showErr('Please enter your email'); return; }
+      const cred = await createUserWithEmailAndPassword(auth, email, pass);
+      await updateProfile(cred.user, { displayName: name });
+      await ensureUserDoc(cred.user, name);
+    } else {
+      await signInWithEmailAndPassword(auth, email, pass);
+    }
+    window.location.href = '/dashboard.html';
+  } catch (e) {
+    const msgs = {
+      'auth/user-not-found':      'No account found with this email.',
+      'auth/wrong-password':      'Incorrect password.',
+      'auth/email-already-in-use':'This email is already registered.',
+      'auth/weak-password':       'Password must be at least 6 characters.',
+      'auth/invalid-email':       'Please enter a valid email address.',
+    };
+    showErr(msgs[e.code] || e.message);
+  }
+};
+
+async function ensureUserDoc(user, name) {
+  const ref = doc(db, 'users', user.uid);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) {
+    await setDoc(ref, {
+      name:       name || user.displayName || 'Friend',
+      email:      user.email,
+      photoURL:   user.photoURL || '',
+      familySize: '3-4',
+      diet:       'vegetarian',
+      allergies:  '',
+      cuisine:    'South Indian',
+      createdAt:  new Date().toISOString()
+    });
+  }
+}
+
+function showErr(msg) {
+  const el = document.getElementById('authErr');
+  el.textContent = msg; el.style.display = 'block';
+}
+function clearErr() {
+  document.getElementById('authErr').style.display = 'none';
+}
+
+// Allow Enter key
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('btnSubmit').click();
+});
+</script>
+</body>
+</html>
