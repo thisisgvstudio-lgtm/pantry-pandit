@@ -96,7 +96,7 @@ ${preferences.planType === 'weekly' ? `{
   try {
     const body = JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { temperature: 0.7, maxOutputTokens: 8192 }
+      generationConfig: { temperature: 0.7, maxOutputTokens: 65536 }
     });
 
     const geminiRes = await fetch(GEMINI_URL, {
@@ -110,10 +110,37 @@ ${preferences.planType === 'weekly' ? `{
 
     const raw = data.candidates[0].content.parts[0].text.trim();
     let jsonStr = raw.replace(/^```json\n?/, '').replace(/\n?```$/, '').trim();
-    // Remove any trailing incomplete content after last valid closing brace
-    const lastBrace = jsonStr.lastIndexOf('}');
-    if (lastBrace !== -1) jsonStr = jsonStr.substring(0, lastBrace + 1);
-    const plan = JSON.parse(jsonStr);
+
+    // Try parsing as-is first
+    let plan;
+    try {
+      plan = JSON.parse(jsonStr);
+    } catch (e) {
+      // Response was truncated — attempt repair by finding the last complete meal object
+      // Close any open arrays/objects by counting brackets
+      const opens = { '{': 0, '[': 0 };
+      const pairs = { '}': '{', ']': '[' };
+      for (const ch of jsonStr) {
+        if (ch === '{' || ch === '[') opens[ch]++;
+        if (ch === '}' || ch === ']') opens[pairs[ch]] = Math.max(0, opens[pairs[ch]] - 1);
+      }
+      // Append missing closers
+      let repaired = jsonStr.trimEnd().replace(/,\s*$/, '');
+      for (let i = 0; i < opens['{'); i++) repaired += '}';
+      for (let i = 0; i < opens['[']; i++) repaired += ']';
+      // Close outer wrappers
+      if (opens['{'] > 0 || opens['['] > 0) {
+        // Re-count after repair attempt
+        let o = 0, a = 0;
+        for (const ch of repaired) {
+          if (ch === '{') o++; if (ch === '}') o--;
+          if (ch === '[') a++; if (ch === ']') a--;
+        }
+        while (a > 0) { repaired += ']'; a--; }
+        while (o > 0) { repaired += '}'; o--; }
+      }
+      plan = JSON.parse(repaired);
+    }
     res.json({ success: true, plan });
 
   } catch (err) {
