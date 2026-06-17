@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1024px;height:500px;overflow:hidden;background:#4A00E0}
+.wrap{
+  width:1024px;height:500px;
+  background:linear-gradient(135deg,#4A00E0 0%,#7B2FF7 50%,#FF5722 100%);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 72px;position:relative;overflow:hidden;
+}
+/* decorative circles */
+.c1{position:absolute;width:500px;height:500px;border-radius:50%;background:rgba(255,255,255,0.05);top:-150px;right:-100px}
+.c2{position:absolute;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,0.06);bottom:-100px;left:200px}
+.c3{position:absolute;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,0.08);top:40px;left:340px}
+
+.left{position:relative;z-index:2;flex:1}
+.logo-row{display:flex;align-items:center;gap:20px;margin-bottom:24px}
+.logo-icon{width:80px;height:80px;background:rgba(255,255,255,0.15);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:44px}
+.logo-text{}
+.logo-text .name{font-size:44px;font-weight:900;color:#fff;letter-spacing:-1px;line-height:1}
+.logo-text .name span{color:#FF9800}
+.tagline{font-size:19px;color:rgba(255,255,255,0.85);line-height:1.5;max-width:420px;margin-bottom:32px;font-weight:400}
+.features{display:flex;flex-direction:column;gap:10px}
+.feat{display:flex;align-items:center;gap:12px}
+.feat .dot{width:8px;height:8px;border-radius:50%;background:#FF9800;flex-shrink:0}
+.feat span{font-size:15px;color:rgba(255,255,255,0.9);font-weight:500}
+
+.right{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:16px}
+.phone{width:200px;height:360px;background:#1a1a2e;border-radius:28px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.4);border:2px solid rgba(255,255,255,0.15);padding:12px;display:flex;flex-direction:column;gap:8px}
+.ph-header{background:linear-gradient(135deg,#4A00E0,#FF5722);border-radius:14px;padding:12px;text-align:center}
+.ph-header .emoji{font-size:22px}
+.ph-header .title{font-size:11px;font-weight:800;color:#fff;margin-top:2px}
+.ph-card{background:#1e1e35;border-radius:10px;padding:10px;border:1px solid rgba(123,47,247,0.3)}
+.ph-card .label{font-size:8px;color:#7B2FF7;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px}
+.ph-meal{display:flex;flex-direction:column;gap:3px}
+.ph-meal .day{display:flex;justify-content:space-between;align-items:center}
+.ph-meal .day-name{font-size:7px;color:rgba(255,255,255,0.5)}
+.ph-meal .meal-name{font-size:8px;color:#fff;font-weight:600}
+.ph-card2{background:#1e1e35;border-radius:10px;padding:10px;border:1px solid rgba(255,87,34,0.2);flex:1}
+.ph-card2 .label{font-size:8px;color:#FF5722;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px}
+.ph-items{display:flex;flex-direction:column;gap:3px}
+.ph-item{font-size:7px;color:rgba(255,255,255,0.7);padding:3px 6px;background:rgba(255,255,255,0.05);border-radius:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="c1"></div>
+  <div class="c2"></div>
+  <div class="c3"></div>
+
+  <div class="left">
+    <div class="logo-row">
+      <div class="logo-icon">🍛</div>
+      <div class="logo-text">
+        <div class="name">PANTRY <span>PANDIT</span></div>
+      </div>
+    </div>
+    <div class="tagline">Your AI-powered Indian kitchen assistant.<br>Plan a full week of meals from your pantry — instantly.</div>
+    <div class="features">
+      <div class="feat"><div class="dot"></div><span>AI weekly meal plans in seconds</span></div>
+      <div class="feat"><div class="dot"></div><span>Smart pantry ingredient tracker</span></div>
+      <div class="feat"><div class="dot"></div><span>Auto shopping list generation</span></div>
+      <div class="feat"><div class="dot"></div><span>Personalised to your family & cuisine</span></div>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="phone">
+      <div class="ph-header">
+        <div class="emoji">🍛</div>
+        <div class="title">PANTRY PANDIT</div>
+      </div>
+      <div class="ph-card">
+        <div class="label">📅 This Week's Plan</div>
+        <div class="ph-meal">
+          <div class="day"><span class="day-name">MON</span><span class="meal-name">Dal Tadka + Rice</span></div>
+          <div class="day"><span class="day-name">TUE</span><span class="meal-name">Palak Paneer</span></div>
+          <div class="day"><span class="day-name">WED</span><span class="meal-name">Chole Bhature</span></div>
+          <div class="day"><span class="day-name">THU</span><span class="meal-name">Aloo Gobi Sabzi</span></div>
+          <div class="day"><span class="day-name">FRI</span><span class="meal-name">Rajma Chawal</span></div>
+        </div>
+      </div>
+      <div class="ph-card2">
+        <div class="label">🛒 Shopping List</div>
+        <div class="ph-items">
+          <div class="ph-item">🥛 Paneer 200g</div>
+          <div class="ph-item">🍅 Tomatoes ×4</div>
+          <div class="ph-item">🧅 Onions ×3</div>
+          <div class="ph-item">🌿 Coriander</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

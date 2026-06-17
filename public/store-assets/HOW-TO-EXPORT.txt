@@ -1,0 +1,34 @@
+HOW TO EXPORT PLAY STORE GRAPHICS AS PNG
+=========================================
+
+=== APP ICON (512x512 PNG) ===
+1. Open Chrome
+2. Go to: https://pantrypandit.com/logo.svg
+3. Right-click the image → "Save image as..." → save as icon-512.png
+   OR use any online SVG-to-PNG converter at 512x512
+
+=== FEATURE GRAPHIC (1024x500 PNG) ===
+1. Open feature-graphic.html in Chrome
+2. Press F12 (DevTools) → Click the device toolbar icon (phone icon top-left)
+3. Set dimensions to: 1024 x 500
+4. Right-click on the page → "Capture screenshot"
+5. Save as feature-graphic.png
+
+=== SCREENSHOTS (390x844 each) ===
+For each screenshot-X-name.html file:
+1. Open in Chrome
+2. Press F12 → Click device toolbar icon
+3. Set dimensions to: 390 x 844
+4. Right-click → "Capture screenshot"
+5. Save with the filename matching the screen name
+
+Files to export:
+- screenshot-1-home.html      → screenshot-1-home.png
+- screenshot-2-generate.html  → screenshot-2-generate.png
+- screenshot-3-meal-plan.html → screenshot-3-meal-plan.png
+- screenshot-4-pantry.html    → screenshot-4-pantry.png
+
+=== PLAY STORE REQUIREMENTS ===
+- App icon:       512x512 PNG (max 1MB)
+- Feature graphic: 1024x500 PNG or JPG
+- Screenshots:    min 2, portrait, 16:9 or 9:16 ratio

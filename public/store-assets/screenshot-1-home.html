@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:390px;height:844px;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0f0f1a}
+
+.screen{width:390px;height:844px;background:#0f0f1a;display:flex;flex-direction:column;overflow:hidden}
+
+/* Top bar */
+.topbar{background:linear-gradient(135deg,#4A00E0,#7B2FF7);padding:48px 20px 20px;position:relative;overflow:hidden}
+.topbar::after{content:'';position:absolute;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,0.07);top:-60px;right:-40px}
+.greeting{font-size:13px;color:rgba(255,255,255,0.75);margin-bottom:2px}
+.username{font-size:22px;font-weight:800;color:#fff}
+.subtitle{font-size:12px;color:rgba(255,255,255,0.65);margin-top:2px}
+
+/* Quick stats */
+.stats{display:flex;gap:10px;padding:16px 20px}
+.stat{flex:1;background:#1a1a2e;border-radius:12px;padding:12px;border:1px solid rgba(123,47,247,0.2);text-align:center}
+.stat .val{font-size:22px;font-weight:800;color:#7B2FF7}
+.stat .lbl{font-size:10px;color:rgba(255,255,255,0.5);margin-top:2px}
+
+/* Section */
+.section{padding:0 20px 12px}
+.sec-title{font-size:13px;font-weight:700;color:rgba(255,255,255,0.9);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.sec-title span{font-size:11px;color:#7B2FF7;font-weight:600}
+
+/* Meal cards */
+.meal-card{background:#1a1a2e;border-radius:14px;padding:14px;margin-bottom:10px;border:1px solid rgba(123,47,247,0.15)}
+.mc-day{font-size:10px;color:#7B2FF7;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
+.mc-meals{display:flex;flex-direction:column;gap:4px}
+.mc-meal{display:flex;align-items:center;gap:8px}
+.mc-meal .type{font-size:9px;color:rgba(255,255,255,0.4);width:50px;flex-shrink:0}
+.mc-meal .name{font-size:12px;color:#fff;font-weight:500}
+
+/* Generate button */
+.gen-btn{margin:0 20px;background:linear-gradient(135deg,#7B2FF7,#FF5722);border-radius:14px;padding:16px;display:flex;align-items:center;justify-content:center;gap:10px}
+.gen-btn .icon{font-size:20px}
+.gen-btn .text{color:#fff;font-size:14px;font-weight:700}
+
+/* Nav */
+.nav{margin-top:auto;background:#141427;border-top:1px solid rgba(255,255,255,0.08);display:flex;padding:8px 0 24px}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0}
+.nav-item .ni{font-size:20px}
+.nav-item .nl{font-size:9px;color:rgba(255,255,255,0.4);font-weight:500}
+.nav-item.active .nl{color:#7B2FF7}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="topbar">
+    <div class="greeting">Good morning 👋</div>
+    <div class="username">Priya</div>
+    <div class="subtitle">What's cooking today?</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="val">12</div><div class="lbl">Pantry Items</div></div>
+    <div class="stat"><div class="val">7</div><div class="lbl">Meals Planned</div></div>
+    <div class="stat"><div class="val">5</div><div class="lbl">Shopping Items</div></div>
+  </div>
+
+  <div class="section">
+    <div class="sec-title">This Week's Plan <span>View all →</span></div>
+    <div class="meal-card">
+      <div class="mc-day">Monday</div>
+      <div class="mc-meals">
+        <div class="mc-meal"><span class="type">Breakfast</span><span class="name">Idli Sambar</span></div>
+        <div class="mc-meal"><span class="type">Lunch</span><span class="name">Dal Tadka + Rice</span></div>
+        <div class="mc-meal"><span class="type">Dinner</span><span class="name">Palak Paneer + Roti</span></div>
+      </div>
+    </div>
+    <div class="meal-card">
+      <div class="mc-day">Tuesday</div>
+      <div class="mc-meals">
+        <div class="mc-meal"><span class="type">Breakfast</span><span class="name">Poha with Peanuts</span></div>
+        <div class="mc-meal"><span class="type">Lunch</span><span class="name">Chole Bhature</span></div>
+        <div class="mc-meal"><span class="type">Dinner</span><span class="name">Aloo Gobi + Rice</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gen-btn">
+    <span class="icon">✨</span>
+    <span class="text">Generate New Meal Plan</span>
+  </div>
+
+  <div class="nav">
+    <div class="nav-item active"><span class="ni">🏠</span><span class="nl">Home</span></div>
+    <div class="nav-item"><span class="ni">📅</span><span class="nl">Plans</span></div>
+    <div class="nav-item"><span class="ni">🧺</span><span class="nl">Pantry</span></div>
+    <div class="nav-item"><span class="ni">🛒</span><span class="nl">Shopping</span></div>
+  </div>
+</div>
+</body>
+</html>

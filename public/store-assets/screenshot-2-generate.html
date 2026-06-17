@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:390px;height:844px;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0f0f1a}
+.screen{width:390px;height:844px;background:#0f0f1a;display:flex;flex-direction:column}
+
+.topbar{background:linear-gradient(135deg,#4A00E0,#FF5722);padding:48px 20px 20px}
+.page-title{font-size:22px;font-weight:800;color:#fff}
+.page-sub{font-size:12px;color:rgba(255,255,255,0.7);margin-top:3px}
+
+.content{flex:1;overflow:hidden;padding:16px 20px;display:flex;flex-direction:column;gap:12px}
+
+.pref-card{background:#1a1a2e;border-radius:14px;padding:14px;border:1px solid rgba(123,47,247,0.2)}
+.pref-title{font-size:11px;font-weight:700;color:#7B2FF7;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px}
+.pref-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.pref-row:last-child{margin-bottom:0}
+.pref-label{font-size:12px;color:rgba(255,255,255,0.7)}
+.pref-val{background:rgba(123,47,247,0.2);border:1px solid rgba(123,47,247,0.4);border-radius:8px;padding:4px 10px;font-size:11px;color:#fff;font-weight:600}
+
+.pantry-card{background:#1a1a2e;border-radius:14px;padding:14px;border:1px solid rgba(123,47,247,0.2)}
+.pantry-title{font-size:11px;font-weight:700;color:#7B2FF7;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px}
+.ingredients{display:flex;flex-wrap:wrap;gap:6px}
+.ing{background:rgba(255,255,255,0.07);border-radius:20px;padding:4px 10px;font-size:11px;color:rgba(255,255,255,0.8)}
+.ing.highlight{background:rgba(123,47,247,0.25);border:1px solid rgba(123,47,247,0.4);color:#fff}
+
+.generating{background:#1a1a2e;border-radius:14px;padding:20px;border:1px solid rgba(255,87,34,0.3);text-align:center}
+.gen-icon{font-size:32px;margin-bottom:8px}
+.gen-text{font-size:14px;font-weight:700;color:#fff;margin-bottom:4px}
+.gen-sub{font-size:11px;color:rgba(255,255,255,0.5)}
+.progress{height:4px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:14px;overflow:hidden}
+.progress-bar{height:100%;width:65%;background:linear-gradient(90deg,#7B2FF7,#FF5722);border-radius:2px}
+
+.nav{background:#141427;border-top:1px solid rgba(255,255,255,0.08);display:flex;padding:8px 0 24px}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0}
+.nav-item .ni{font-size:20px}
+.nav-item .nl{font-size:9px;color:rgba(255,255,255,0.4);font-weight:500}
+.nav-item.active .nl{color:#FF5722}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="topbar">
+    <div class="page-title">✨ Generate Plan</div>
+    <div class="page-sub">AI creates your perfect week</div>
+  </div>
+
+  <div class="content">
+    <div class="pref-card">
+      <div class="pref-title">⚙️ Your Preferences</div>
+      <div class="pref-row">
+        <span class="pref-label">Diet</span>
+        <span class="pref-val">Vegetarian</span>
+      </div>
+      <div class="pref-row">
+        <span class="pref-label">Cuisine</span>
+        <span class="pref-val">South Indian</span>
+      </div>
+      <div class="pref-row">
+        <span class="pref-label">Family size</span>
+        <span class="pref-val">3–4 people</span>
+      </div>
+    </div>
+
+    <div class="pantry-card">
+      <div class="pantry-title">🧺 Using Your Pantry (12 items)</div>
+      <div class="ingredients">
+        <span class="ing highlight">🌾 Rice</span>
+        <span class="ing highlight">🫘 Dal</span>
+        <span class="ing highlight">🥬 Spinach</span>
+        <span class="ing">🧅 Onion</span>
+        <span class="ing">🍅 Tomato</span>
+        <span class="ing highlight">🧀 Paneer</span>
+        <span class="ing">🌶️ Chillies</span>
+        <span class="ing">🫙 Cumin</span>
+        <span class="ing highlight">🧄 Garlic</span>
+        <span class="ing">🫚 Oil</span>
+      </div>
+    </div>
+
+    <div class="generating">
+      <div class="gen-icon">🤖</div>
+      <div class="gen-text">AI is crafting your plan…</div>
+      <div class="gen-sub">Analysing pantry & preferences</div>
+      <div class="progress"><div class="progress-bar"></div></div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <div class="nav-item"><span class="ni">🏠</span><span class="nl">Home</span></div>
+    <div class="nav-item"><span class="ni">📅</span><span class="nl">Plans</span></div>
+    <div class="nav-item"><span class="ni">🧺</span><span class="nl">Pantry</span></div>
+    <div class="nav-item active"><span class="ni">✨</span><span class="nl">Generate</span></div>
+  </div>
+</div>
+</body>
+</html>

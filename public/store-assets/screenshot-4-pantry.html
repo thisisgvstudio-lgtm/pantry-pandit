@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:390px;height:844px;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0f0f1a}
+.screen{width:390px;height:844px;background:#0f0f1a;display:flex;flex-direction:column}
+
+.topbar{background:linear-gradient(135deg,#4A00E0,#7B2FF7);padding:48px 20px 20px}
+.page-title{font-size:22px;font-weight:800;color:#fff}
+.page-sub{font-size:12px;color:rgba(255,255,255,0.7);margin-top:3px}
+
+.search{margin:14px 20px 0;background:#1a1a2e;border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px;border:1px solid rgba(123,47,247,0.2)}
+.search .icon{font-size:14px;opacity:.5}
+.search .placeholder{font-size:13px;color:rgba(255,255,255,0.3)}
+
+.content{flex:1;overflow:hidden;padding:12px 20px;display:flex;flex-direction:column;gap:10px}
+
+.category{margin-bottom:4px}
+.cat-title{font-size:10px;font-weight:700;color:#7B2FF7;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.items-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.item-card{background:#1a1a2e;border-radius:12px;padding:12px;border:1px solid rgba(123,47,247,0.12);display:flex;align-items:center;gap:10px}
+.item-emoji{font-size:22px;flex-shrink:0}
+.item-info{flex:1;min-width:0}
+.item-name{font-size:12px;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item-qty{font-size:10px;color:rgba(255,255,255,0.45);margin-top:2px}
+.item-status{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.item-status.good{background:#00BFA5}
+.item-status.low{background:#FF9800}
+
+.add-btn{background:linear-gradient(135deg,#7B2FF7,#FF5722);border-radius:12px;padding:14px;display:flex;align-items:center;justify-content:center;gap:8px;margin:0 20px}
+.add-btn .icon{font-size:18px}
+.add-btn .text{font-size:14px;font-weight:700;color:#fff}
+
+.nav{background:#141427;border-top:1px solid rgba(255,255,255,0.08);display:flex;padding:8px 0 24px}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0}
+.nav-item .ni{font-size:20px}
+.nav-item .nl{font-size:9px;color:rgba(255,255,255,0.4);font-weight:500}
+.nav-item.active .nl{color:#7B2FF7}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="topbar">
+    <div class="page-title">🧺 My Pantry</div>
+    <div class="page-sub">12 ingredients tracked</div>
+  </div>
+
+  <div class="search">
+    <span class="icon">🔍</span>
+    <span class="placeholder">Search ingredients…</span>
+  </div>
+
+  <div class="content">
+    <div class="category">
+      <div class="cat-title">🌾 Grains & Pulses</div>
+      <div class="items-grid">
+        <div class="item-card"><span class="item-emoji">🌾</span><div class="item-info"><div class="item-name">Basmati Rice</div><div class="item-qty">2 kg</div></div><div class="item-status good"></div></div>
+        <div class="item-card"><span class="item-emoji">🫘</span><div class="item-info"><div class="item-name">Toor Dal</div><div class="item-qty">500g</div></div><div class="item-status good"></div></div>
+        <div class="item-card"><span class="item-emoji">🌿</span><div class="item-info"><div class="item-name">Chana Dal</div><div class="item-qty">200g</div></div><div class="item-status low"></div></div>
+        <div class="item-card"><span class="item-emoji">🌾</span><div class="item-info"><div class="item-name">Wheat Flour</div><div class="item-qty">1 kg</div></div><div class="item-status good"></div></div>
+      </div>
+    </div>
+
+    <div class="category">
+      <div class="cat-title">🥬 Vegetables</div>
+      <div class="items-grid">
+        <div class="item-card"><span class="item-emoji">🥬</span><div class="item-info"><div class="item-name">Spinach</div><div class="item-qty">1 bunch</div></div><div class="item-status good"></div></div>
+        <div class="item-card"><span class="item-emoji">🧅</span><div class="item-info"><div class="item-name">Onions</div><div class="item-qty">4 pcs</div></div><div class="item-status low"></div></div>
+        <div class="item-card"><span class="item-emoji">🍅</span><div class="item-info"><div class="item-name">Tomatoes</div><div class="item-qty">3 pcs</div></div><div class="item-status low"></div></div>
+        <div class="item-card"><span class="item-emoji">🧀</span><div class="item-info"><div class="item-name">Paneer</div><div class="item-qty">250g</div></div><div class="item-status good"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="add-btn">
+    <span class="icon">➕</span>
+    <span class="text">Add Ingredient</span>
+  </div>
+
+  <div class="nav">
+    <div class="nav-item"><span class="ni">🏠</span><span class="nl">Home</span></div>
+    <div class="nav-item"><span class="ni">📅</span><span class="nl">Plans</span></div>
+    <div class="nav-item active"><span class="ni">🧺</span><span class="nl">Pantry</span></div>
+    <div class="nav-item"><span class="ni">🛒</span><span class="nl">Shopping</span></div>
+  </div>
+</div>
+</body>
+</html>

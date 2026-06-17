@@ -263,6 +263,13 @@ function clearErr() {
   document.getElementById('authErr').style.display = 'none';
 }
 
+// Hide Google Sign-In in Capacitor app
+const isApp = ['localhost','127.0.0.1'].includes(window.location.hostname) || window.location.protocol === 'file:';
+if (isApp) {
+  document.getElementById('btnGoogle').style.display = 'none';
+  document.querySelector('.or-div').style.display = 'none';
+}
+
 // Allow Enter key
 document.addEventListener('keydown', e => {
   if (e.key === 'Enter') document.getElementById('btnSubmit').click();

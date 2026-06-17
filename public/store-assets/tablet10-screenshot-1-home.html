@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:800px;height:1280px;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0f0f1a}
+.screen{width:800px;height:1280px;background:#0f0f1a;display:flex;flex-direction:column}
+
+.topbar{background:linear-gradient(135deg,#4A00E0,#7B2FF7);padding:64px 40px 32px;position:relative;overflow:hidden}
+.topbar::after{content:'';position:absolute;width:360px;height:360px;border-radius:50%;background:rgba(255,255,255,0.07);top:-100px;right:-60px}
+.topbar::before{content:'';position:absolute;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,0.05);bottom:-60px;left:300px}
+.greeting{font-size:17px;color:rgba(255,255,255,0.75);margin-bottom:4px}
+.username{font-size:34px;font-weight:800;color:#fff}
+.subtitle{font-size:15px;color:rgba(255,255,255,0.65);margin-top:4px}
+
+.stats{display:flex;gap:16px;padding:24px 40px}
+.stat{flex:1;background:#1a1a2e;border-radius:16px;padding:20px;border:1px solid rgba(123,47,247,0.2);text-align:center}
+.stat .val{font-size:34px;font-weight:800;color:#7B2FF7}
+.stat .lbl{font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px}
+
+.section{padding:0 40px 16px}
+.sec-title{font-size:17px;font-weight:700;color:rgba(255,255,255,0.9);margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+.sec-title span{font-size:14px;color:#7B2FF7;font-weight:600}
+
+.meal-card{background:#1a1a2e;border-radius:18px;padding:18px;margin-bottom:14px;border:1px solid rgba(123,47,247,0.15)}
+.mc-day{font-size:13px;color:#7B2FF7;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px}
+.mc-meals{display:flex;gap:14px}
+.mc-meal{flex:1;background:rgba(255,255,255,0.04);border-radius:12px;padding:14px}
+.mc-meal .type{font-size:10px;color:rgba(255,255,255,0.4);font-weight:600;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:6px}
+.mc-meal .name{font-size:15px;color:#fff;font-weight:700;line-height:1.3}
+.mc-meal .desc{font-size:11px;color:rgba(255,255,255,0.45);margin-top:4px}
+
+.gen-btn{margin:0 40px;background:linear-gradient(135deg,#7B2FF7,#FF5722);border-radius:18px;padding:22px;display:flex;align-items:center;justify-content:center;gap:14px}
+.gen-btn .icon{font-size:26px}
+.gen-btn .text{color:#fff;font-size:18px;font-weight:700}
+
+.nav{margin-top:auto;background:#141427;border-top:1px solid rgba(255,255,255,0.08);display:flex;padding:12px 0 36px}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 0}
+.nav-item .ni{font-size:28px}
+.nav-item .nl{font-size:13px;color:rgba(255,255,255,0.4);font-weight:500}
+.nav-item.active .nl{color:#7B2FF7}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="topbar">
+    <div class="greeting">Good morning 👋</div>
+    <div class="username">Priya</div>
+    <div class="subtitle">What's cooking today?</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="val">12</div><div class="lbl">Pantry Items</div></div>
+    <div class="stat"><div class="val">7</div><div class="lbl">Meals Planned</div></div>
+    <div class="stat"><div class="val">5</div><div class="lbl">Shopping Items</div></div>
+    <div class="stat"><div class="val">3</div><div class="lbl">Days Remaining</div></div>
+  </div>
+
+  <div class="section">
+    <div class="sec-title">This Week's Plan <span>View all →</span></div>
+    <div class="meal-card">
+      <div class="mc-day">Monday</div>
+      <div class="mc-meals">
+        <div class="mc-meal"><div class="type">☀️ Breakfast</div><div class="name">Idli Sambar</div><div class="desc">Soft idlis with lentil sambar & coconut chutney</div></div>
+        <div class="mc-meal"><div class="type">🌤 Lunch</div><div class="name">Dal Tadka + Rice</div><div class="desc">Yellow dal with cumin & garlic tempering</div></div>
+        <div class="mc-meal"><div class="type">🌙 Dinner</div><div class="name">Palak Paneer + Roti</div><div class="desc">Creamy spinach curry with fresh paneer</div></div>
+      </div>
+    </div>
+    <div class="meal-card">
+      <div class="mc-day">Tuesday</div>
+      <div class="mc-meals">
+        <div class="mc-meal"><div class="type">☀️ Breakfast</div><div class="name">Poha with Peanuts</div><div class="desc">Flattened rice with mustard seeds & curry leaves</div></div>
+        <div class="mc-meal"><div class="type">🌤 Lunch</div><div class="name">Chole Bhature</div><div class="desc">Spicy chickpea curry with fluffy fried bread</div></div>
+        <div class="mc-meal"><div class="type">🌙 Dinner</div><div class="name">Aloo Gobi + Chapati</div><div class="desc">Potato & cauliflower dry sabzi</div></div>
+      </div>
+    </div>
+    <div class="meal-card">
+      <div class="mc-day">Wednesday</div>
+      <div class="mc-meals">
+        <div class="mc-meal"><div class="type">☀️ Breakfast</div><div class="name">Upma</div><div class="desc">Semolina with vegetables & mustard seeds</div></div>
+        <div class="mc-meal"><div class="type">🌤 Lunch</div><div class="name">Rajma Chawal</div><div class="desc">Red kidney beans curry with basmati rice</div></div>
+        <div class="mc-meal"><div class="type">🌙 Dinner</div><div class="name">Paneer Butter Masala</div><div class="desc">Rich tomato-based paneer gravy with naan</div></div>
+      </div>
+    </div>
+    <div class="meal-card">
+      <div class="mc-day">Thursday</div>
+      <div class="mc-meals">
+        <div class="mc-meal"><div class="type">☀️ Breakfast</div><div class="name">Dosa & Chutney</div><div class="desc">Crispy rice crepe with coconut chutney</div></div>
+        <div class="mc-meal"><div class="type">🌤 Lunch</div><div class="name">Matar Paneer</div><div class="desc">Green peas & paneer in spiced gravy</div></div>
+        <div class="mc-meal"><div class="type">🌙 Dinner</div><div class="name">Baingan Bharta</div><div class="desc">Smoky roasted aubergine with spices</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gen-btn">
+    <span class="icon">✨</span>
+    <span class="text">Generate New Meal Plan</span>
+  </div>
+
+  <div class="nav">
+    <div class="nav-item active"><span class="ni">🏠</span><span class="nl">Home</span></div>
+    <div class="nav-item"><span class="ni">📅</span><span class="nl">Plans</span></div>
+    <div class="nav-item"><span class="ni">🧺</span><span class="nl">Pantry</span></div>
+    <div class="nav-item"><span class="ni">🛒</span><span class="nl">Shopping</span></div>
+    <div class="nav-item"><span class="ni">✨</span><span class="nl">Generate</span></div>
+  </div>
+</div>
+</body>
+</html>

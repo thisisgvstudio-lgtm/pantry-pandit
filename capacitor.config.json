@@ -1,9 +1,5 @@
 {
   "appId": "com.pantrypandit.app",
   "appName": "Pantry Pandit",
-  "webDir": "public",
-  "server": {
-    "url": "https://pantrypandit.com",
-    "cleartext": false
-  }
+  "webDir": "public"
 }
